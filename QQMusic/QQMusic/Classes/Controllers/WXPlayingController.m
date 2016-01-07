@@ -132,6 +132,45 @@
     self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
 }
 
+#pragma mark - 进度条事件处理和拖动手势
+
+/** 监听进度条TouchDown事件 */
+- (IBAction)progressStart {
+    // 1.当UISlider监听到TouchDown事件时,移除定时器
+    [self removeProgressTimer];
+}
+
+/** 监听进度条TouchUpInside事件 */
+- (IBAction)progressEnd {
+    // 1.当UISlider监听到TouchUpInside事件时,更新当前播放进度
+    self.currentPlayer.currentTime = self.progressSlider.value * self.currentPlayer.duration;
+    
+    // 2.重新开启定时器
+    [self addProgressTimer];
+}
+
+/** 监听到进度条ValueChange事件 */
+- (IBAction)progressValueChange {
+    // 1.拖动UISlider时,更新当前播放时间Label的文字信息
+    self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * self.currentPlayer.duration];
+}
+
+// SINGLE: 在Main.storyboard给UISlider进度条添加点击Tap手势,看gif截图
+/** 监听进度条点击Tap手势 */
+- (IBAction)sliderTap:(UITapGestureRecognizer *)sender {
+    // 1.获取当前点的位置
+    CGPoint curPoint = [sender locationInView:sender.view];
+    
+    // 2.获取当前点与总进度的比例
+    CGFloat ratio = curPoint.x / self.progressSlider.bounds.size.width;
+    
+    // 3.更新当前播放器的播放时间
+    self.currentPlayer.currentTime = ratio * self.currentPlayer.duration;
+    
+    // 4.更新当前播放时间Label,总时长Label的信息和进度条信息,因为updateProgressInfo方法使用self.currentPlayer.currentTime值,所以必须在第3步执行完才能执行updateProgressInfo方法,如果顺序反之,则不行
+    [self updateProgressInfo];
+}
+
 
 #pragma mark - 初始化设置
 /** 给背景添加毛玻璃效果 */

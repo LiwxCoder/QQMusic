@@ -20,6 +20,7 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lkq.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="WxZ-0c-axe" userLabel="Album View">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <gestureRecognizers/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dfi-y2-hsR" userLabel="顶部的view">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="100"/>
@@ -105,6 +106,12 @@
                                     <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="4OD-9W-gFd" userLabel="播放进度">
                                         <rect key="frame" x="40" y="11" width="520" height="31"/>
                                         <color key="minimumTrackTintColor" red="0.14901960780000001" green="0.73333333329999995" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
+                                        <connections>
+                                            <action selector="progressEnd" destination="BYZ-38-t0r" eventType="touchUpInside" id="avI-Vx-9up"/>
+                                            <action selector="progressStart" destination="BYZ-38-t0r" eventType="touchDown" id="ghB-9F-SH9"/>
+                                            <action selector="progressValueChange" destination="BYZ-38-t0r" eventType="valueChanged" id="1U3-ge-vjt"/>
+                                            <outletCollection property="gestureRecognizers" destination="N1U-CQ-Ig3" appends="YES" id="ogu-tU-nSa"/>
+                                        </connections>
                                     </slider>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -185,6 +192,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="N1U-CQ-Ig3">
+                    <connections>
+                        <action selector="sliderTap:" destination="BYZ-38-t0r" id="klS-tb-5r8"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
         </scene>
     </scenes>
