@@ -70,22 +70,19 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="nhC-56-hlx" userLabel="底部的view">
                                 <rect key="frame" x="0.0" y="450" width="600" height="150"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgr-6Y-Mcw" userLabel="播放/暂停">
-                                        <rect key="frame" x="268" y="56" width="64" height="64"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="64" id="S9D-uI-Xte"/>
-                                            <constraint firstAttribute="height" constant="64" id="stZ-oM-ulp"/>
-                                        </constraints>
-                                        <state key="normal" image="player_btn_play_normal"/>
-                                        <state key="selected" image="player_btn_pause_normal"/>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6bT-xX-Zjf" userLabel="下一首">
                                         <rect key="frame" x="362" y="56" width="64" height="64"/>
                                         <state key="normal" image="player_btn_next_normal"/>
+                                        <connections>
+                                            <action selector="nextMusic" destination="BYZ-38-t0r" eventType="touchUpInside" id="iEN-VI-DyG"/>
+                                        </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sIB-Zi-Rnh" userLabel="上一首">
                                         <rect key="frame" x="174" y="56" width="64" height="64"/>
                                         <state key="normal" image="player_btn_pre_normal"/>
+                                        <connections>
+                                            <action selector="previous" destination="BYZ-38-t0r" eventType="touchUpInside" id="y7u-GC-OJI"/>
+                                        </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02:30" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="354-RA-TRZ" userLabel="当前播放时间">
                                         <rect key="frame" x="0.0" y="15" width="42" height="21"/>
@@ -113,6 +110,18 @@
                                             <outletCollection property="gestureRecognizers" destination="N1U-CQ-Ig3" appends="YES" id="ogu-tU-nSa"/>
                                         </connections>
                                     </slider>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hgr-6Y-Mcw" userLabel="播放/暂停">
+                                        <rect key="frame" x="268" y="56" width="64" height="64"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="64" id="S9D-uI-Xte"/>
+                                            <constraint firstAttribute="height" constant="64" id="stZ-oM-ulp"/>
+                                        </constraints>
+                                        <state key="normal" image="player_btn_play_normal"/>
+                                        <state key="selected" image="player_btn_pause_normal"/>
+                                        <connections>
+                                            <action selector="playOrPause" destination="BYZ-38-t0r" eventType="touchUpInside" id="TPo-BY-vJ5"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <constraints>
@@ -185,6 +194,7 @@
                         <outlet property="albumView" destination="WxZ-0c-axe" id="klT-bo-uFR"/>
                         <outlet property="currentLabel" destination="354-RA-TRZ" id="fck-gZ-oaP"/>
                         <outlet property="iconView" destination="ZRi-oV-wBQ" id="kaO-hL-gwS"/>
+                        <outlet property="playOrPauseBtn" destination="hgr-6Y-Mcw" id="Ecu-jx-AoM"/>
                         <outlet property="progressSlider" destination="4OD-9W-gFd" id="zbm-R9-IWv"/>
                         <outlet property="singerLabel" destination="Rdp-E9-Qfb" id="hNv-Cm-2rG"/>
                         <outlet property="songLabel" destination="34Q-Pr-jhw" id="XDE-0s-dT6"/>
