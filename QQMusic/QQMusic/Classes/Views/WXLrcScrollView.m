@@ -11,6 +11,7 @@
 #import "WXLrcTool.h"
 #import "WXLrcLineItem.h"
 #import <Masonry.h>
+#import "WXLrcLabel.h"
 
 @interface WXLrcScrollView () <UITableViewDataSource, UITableViewDelegate>
 /** 显示歌词的tableView */
@@ -143,6 +144,20 @@
             // 4.刷新当前行和上一行歌词
             [self.tableView reloadRowsAtIndexPaths:@[currentIndexPath, previousIndexPath] withRowAnimation:UITableViewRowAnimationNone];
         }
+        
+        // 4.获取当前这句歌词,来获得当前播放的进度,传递当前歌词进度给cell中lrcLabel
+        if (self.currentIndex == i) {
+            
+            // SINGLE: 1.获取当前行歌词进度 当前行歌词进度 = (当前播放的时间 - 当前行歌词的开始时间) / (下一行歌词的开始时间 - 当前行歌词的开始时间)
+            CGFloat progress = (currentTime - currentLrcItem.time) / (nextLrcItem.time - currentLrcItem.time);
+            
+            // 2.获取当前显示歌词的cell
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            WXLrcCell *lrcCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            
+            // 3.设置歌词进度,传递给当前歌词进度给cell中lrcLabel
+            lrcCell.lrcLabel.progress = progress;
+        }
     }
 }
 
@@ -162,17 +177,16 @@
     WXLrcLineItem *item = self.lrcList[indexPath.row];
     
     // 3.设置cell歌词数据
-    cell.textLabel.text = item.name;
+    cell.lrcLabel.text = item.name;
     
     // 4.设置当前歌词文字样式
     if (indexPath.row == self.currentIndex) {
         // 当前播放的歌词
-        cell.textLabel.textColor = [UIColor greenColor];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+        cell.lrcLabel.font = [UIFont boldSystemFontOfSize:18];
     }else {
-        // 当前播放的歌词
-        cell.textLabel.textColor = [UIColor lightGrayColor];
-        cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+        // 非当前播放的歌词
+        cell.lrcLabel.font = [UIFont boldSystemFontOfSize:14];
+        cell.lrcLabel.progress = 0;
     }
     
     return cell;

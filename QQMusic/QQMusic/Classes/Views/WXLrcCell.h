@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@class WXLrcLabel;
 @interface WXLrcCell : UITableViewCell
+
+/** 歌词的Label*/
+@property (nonatomic, weak) WXLrcLabel *lrcLabel;
 
 /** 创建cell类方法 */
 + (instancetype)lrcCellWithTableView:(UITableView *)tableView;

@@ -45,12 +45,10 @@
 /** 解析时间 时间数据: 00:31.25 */
 - (NSTimeInterval)timeWithTimeString:(NSString *)timeString {
     
-    NSLog(@"time: %@",timeString);
     NSInteger min = [[timeString componentsSeparatedByString:@":"][0] integerValue];
     NSInteger sec = [[timeString substringWithRange:NSMakeRange(3, 2)] integerValue];
     NSInteger mSec = [[timeString componentsSeparatedByString:@"."][1] integerValue];
     
-    NSLog(@"%02ld:%02ld:%02ld", min, sec, mSec);
     return min * 60 + sec + mSec * 0.01;
 }
 

@@ -7,6 +7,8 @@
 //
 
 #import "WXLrcCell.h"
+#import "WXLrcLabel.h"
+#import <Masonry.h>
 
 @implementation WXLrcCell
 
@@ -31,12 +33,24 @@
 {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         
-        // 1.初始化cell属性
-        self.backgroundColor = [UIColor clearColor];
-        self.textLabel.textColor = [UIColor whiteColor];
-        self.textLabel.textAlignment = NSTextAlignmentCenter;
-        // SINGLE: 取消选中样式
+        // SINGLE: 1.设置取消选中样式,设置cell背景色为透明颜色
         self.selectionStyle = UITableViewCellSelectionStyleNone;
+        self.backgroundColor = [UIColor clearColor];
+        
+        // 2.创建歌词Label
+        WXLrcLabel *lrcLabel = [[WXLrcLabel alloc] init];
+        self.lrcLabel = lrcLabel;
+        [self.contentView addSubview:lrcLabel];
+        
+        // 3.设置cell约束,让歌词Label位置居中
+        [lrcLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.center.equalTo(self.contentView);
+        }];
+        
+        // 4.初始化cell属性
+        lrcLabel.textColor = [UIColor whiteColor];
+        lrcLabel.textAlignment = NSTextAlignmentCenter;
+        lrcLabel.font = [UIFont systemFontOfSize:14];
     }
     return self;
 }
