@@ -157,15 +157,20 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="lkq.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="ZRi-oV-wBQ" userLabel="歌手中间图标">
-                                <rect key="frame" x="175.5" y="130" width="249" height="249"/>
+                                <rect key="frame" x="175" y="130" width="249" height="249"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="ZRi-oV-wBQ" secondAttribute="height" multiplier="1:1" id="xNJ-gg-XUl"/>
                                 </constraints>
                             </imageView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lqX-Ys-d8N" userLabel="Lrc Scroll View" customClass="WXLrcScrollView">
+                                <rect key="frame" x="0.0" y="100" width="600" height="350"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                            </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="WxZ-0c-axe" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="1Yf-SR-iOP"/>
+                            <constraint firstAttribute="trailing" secondItem="lqX-Ys-d8N" secondAttribute="trailing" id="2cp-S4-EK2"/>
                             <constraint firstItem="nhC-56-hlx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="7OD-Rr-wxA"/>
                             <constraint firstItem="bQ2-cg-JDN" firstAttribute="top" secondItem="ZRi-oV-wBQ" secondAttribute="bottom" constant="30" id="Bfi-Y7-klH"/>
                             <constraint firstAttribute="trailing" secondItem="dfi-y2-hsR" secondAttribute="trailing" id="GMi-jk-2B9"/>
@@ -176,8 +181,11 @@
                             <constraint firstItem="nhC-56-hlx" firstAttribute="top" secondItem="ZRi-oV-wBQ" secondAttribute="bottom" constant="30" id="hQD-Fj-jyF"/>
                             <constraint firstItem="ZRi-oV-wBQ" firstAttribute="top" secondItem="dfi-y2-hsR" secondAttribute="bottom" constant="30" id="jcB-O2-Sxp"/>
                             <constraint firstAttribute="trailing" secondItem="WxZ-0c-axe" secondAttribute="trailing" id="lSR-i5-c33"/>
+                            <constraint firstItem="lqX-Ys-d8N" firstAttribute="top" secondItem="dfi-y2-hsR" secondAttribute="bottom" id="ldS-LE-qti"/>
                             <constraint firstItem="dfi-y2-hsR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="ll6-P7-AqC"/>
                             <constraint firstItem="ZRi-oV-wBQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="nxu-qn-Nag"/>
+                            <constraint firstItem="lqX-Ys-d8N" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="roK-eM-21h"/>
+                            <constraint firstItem="nhC-56-hlx" firstAttribute="top" secondItem="lqX-Ys-d8N" secondAttribute="bottom" id="tpz-cb-7ug"/>
                             <constraint firstItem="dfi-y2-hsR" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="vwM-ln-5bX"/>
                             <constraint firstItem="nhC-56-hlx" firstAttribute="top" secondItem="bQ2-cg-JDN" secondAttribute="bottom" constant="20" id="wXF-Un-oKr"/>
                             <constraint firstItem="bQ2-cg-JDN" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xrP-Gf-FMr"/>
@@ -194,6 +202,8 @@
                         <outlet property="albumView" destination="WxZ-0c-axe" id="klT-bo-uFR"/>
                         <outlet property="currentLabel" destination="354-RA-TRZ" id="fck-gZ-oaP"/>
                         <outlet property="iconView" destination="ZRi-oV-wBQ" id="kaO-hL-gwS"/>
+                        <outlet property="lrcLabel" destination="bQ2-cg-JDN" id="nQk-ID-aaW"/>
+                        <outlet property="lrcScrollView" destination="lqX-Ys-d8N" id="dhO-Og-d6f"/>
                         <outlet property="playOrPauseBtn" destination="hgr-6Y-Mcw" id="Ecu-jx-AoM"/>
                         <outlet property="progressSlider" destination="4OD-9W-gFd" id="zbm-R9-IWv"/>
                         <outlet property="singerLabel" destination="Rdp-E9-Qfb" id="hNv-Cm-2rG"/>

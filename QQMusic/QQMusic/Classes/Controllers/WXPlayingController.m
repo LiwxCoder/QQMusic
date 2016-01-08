@@ -12,10 +12,11 @@
 #import "WXAudioTool.h"
 #import "NSString+TimeExtension.h"
 #import "CALayer+PauseAimate.h"
+#import "WXLrcScrollView.h"
 #import <Masonry.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface WXPlayingController () <AVAudioPlayerDelegate>
+@interface WXPlayingController () <UIScrollViewDelegate, AVAudioPlayerDelegate>
 
 #pragma mark - 子控件
 /** 背景图片 */
@@ -34,6 +35,10 @@
 @property (weak, nonatomic) IBOutlet UILabel *totalLabel;
 /** 播放暂停按钮 */
 @property (weak, nonatomic) IBOutlet UIButton *playOrPauseBtn;
+/** 歌词的ScrollView */
+@property (weak, nonatomic) IBOutlet WXLrcScrollView *lrcScrollView;
+/** 歌词的Label */
+@property (weak, nonatomic) IBOutlet UILabel *lrcLabel;
 
 #pragma mark - 成员属性
 /** 当前播放器 */
@@ -56,6 +61,62 @@
     
     // 3.播放音乐
     [self playingMusic];
+    
+    // 4.初始化歌词的ScrollView
+    [self setupLrcScrollView];
+}
+
+#pragma mark - 初始化设置
+/** 初始化歌词的ScrollView */
+- (void)setupLrcScrollView
+{
+    // 1.设置歌词ScrollView的contentSize,设置只能横向拖动,高度设置为0
+    self.lrcScrollView.contentSize = CGSizeMake(self.view.bounds.size.width * 2, 0);
+
+    // 2.设置代理,也可以在storyboard设置代理
+    self.lrcScrollView.delegate = self;
+}
+
+/** 给背景添加毛玻璃效果 */
+- (void)setupBlur
+{
+    // REMARKS: 添加毛玻璃效果
+    // 1.创建toolBar,设置毛玻璃样式,添加到背景的view
+    UIToolbar *toolBar = [[UIToolbar alloc] init];
+    toolBar.barStyle = UIBarStyleBlack;
+    [self.albumView addSubview:toolBar];
+    
+    // 2.toolBar添加约束
+    [toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.albumView);
+    }];
+}
+
+// SINGLE: view即将布局子控件的时候调用,在该方法中可以拿到子控件的真实尺寸
+- (void)viewWillLayoutSubviews
+{
+    [super viewWillLayoutSubviews];
+    
+    // SINGLE: 设置ImageView为圆形
+    self.iconView.layer.cornerRadius = self.iconView.frame.size.width * 0.5;
+    self.iconView.layer.masksToBounds = YES;
+    // SINGLE: 设置ImageView边框颜色,宽度
+    self.iconView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.iconView.layer.borderWidth = 5.0;
+}
+
+/** 监听歌词的lrcScrollView的拖动 */
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView
+{
+    // 1.获取当前点
+    CGPoint curPoint = scrollView.contentOffset;
+    
+    // 2.通过偏移量获取滑动的比例
+    CGFloat ratio = (1 - curPoint.x / self.lrcScrollView.bounds.size.width);
+    
+    // 3.改变主界面中间歌手图片iconView和主界面单行歌词的透明度
+    self.iconView.alpha = ratio;
+    self.lrcLabel.alpha = ratio;
 }
 
 #pragma mark - 播放音乐
@@ -179,6 +240,7 @@
 }
 
 #pragma mark - 播放/暂停,上一首,下一首操作
+/** 播放暂停操作 */
 - (IBAction)playOrPause {
     // 1.切换播放按钮的状态
     self.playOrPauseBtn.selected = !self.playOrPauseBtn.isSelected;
@@ -199,6 +261,7 @@
         [self.iconView.layer resumeAnimate];
     }
 }
+/** 下一首 */
 - (IBAction)nextMusic {
     
     // 1.获取下一首音乐
@@ -208,6 +271,7 @@
     [self playMusic:nextMusicItem];
     
 }
+/** 上一首 */
 - (IBAction)previous {
     // 1.获取上一首音乐
     WXMusicItem *previousMusicItem = [WXMusicTool previous];
@@ -234,35 +298,6 @@
 {
     // 音乐播放完毕自动切换下一首
     [self nextMusic];
-}
-
-#pragma mark - 初始化设置
-/** 给背景添加毛玻璃效果 */
-- (void)setupBlur
-{
-    // REMARKS: 添加毛玻璃效果
-    // 1.创建toolBar,设置毛玻璃样式,添加到背景的view
-    UIToolbar *toolBar = [[UIToolbar alloc] init];
-    toolBar.barStyle = UIBarStyleBlack;
-    [self.albumView addSubview:toolBar];
-    
-    // 2.toolBar添加约束
-    [toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.edges.equalTo(self.albumView);
-    }];
-}
-
-// SINGLE: view即将布局子控件的时候调用,在该方法中可以拿到子控件的真实尺寸
-- (void)viewWillLayoutSubviews
-{
-    [super viewWillLayoutSubviews];
-    
-    // SINGLE: 设置ImageView为圆形
-    self.iconView.layer.cornerRadius = self.iconView.frame.size.width * 0.5;
-    self.iconView.layer.masksToBounds = YES;
-    // SINGLE: 设置ImageView边框颜色,宽度
-    self.iconView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-    self.iconView.layer.borderWidth = 5.0;
 }
 
 

@@ -62,6 +62,8 @@
 		D93950B41C3EBCD000C47F0D /* WXMusicItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D93950B31C3EBCD000C47F0D /* WXMusicItem.m */; };
 		D93950B81C3EC55B00C47F0D /* NSString+TimeExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = D93950B71C3EC55B00C47F0D /* NSString+TimeExtension.m */; };
 		D93950BB1C3EE38C00C47F0D /* CALayer+PauseAimate.m in Sources */ = {isa = PBXBuildFile; fileRef = D93950BA1C3EE38C00C47F0D /* CALayer+PauseAimate.m */; };
+		D9F90EF91C3FC84B00A32CF6 /* WXLrcScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F90EF81C3FC84B00A32CF6 /* WXLrcScrollView.m */; };
+		D9F90EFC1C3FDB5A00A32CF6 /* WXLrcCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D9F90EFB1C3FDB5A00A32CF6 /* WXLrcCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -152,6 +154,10 @@
 		D93950B71C3EC55B00C47F0D /* NSString+TimeExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+TimeExtension.m"; sourceTree = "<group>"; };
 		D93950B91C3EE38C00C47F0D /* CALayer+PauseAimate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "CALayer+PauseAimate.h"; sourceTree = "<group>"; };
 		D93950BA1C3EE38C00C47F0D /* CALayer+PauseAimate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "CALayer+PauseAimate.m"; sourceTree = "<group>"; };
+		D9F90EF71C3FC84B00A32CF6 /* WXLrcScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXLrcScrollView.h; sourceTree = "<group>"; };
+		D9F90EF81C3FC84B00A32CF6 /* WXLrcScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXLrcScrollView.m; sourceTree = "<group>"; };
+		D9F90EFA1C3FDB5A00A32CF6 /* WXLrcCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXLrcCell.h; sourceTree = "<group>"; };
+		D9F90EFB1C3FDB5A00A32CF6 /* WXLrcCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXLrcCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -393,6 +399,10 @@
 		D93950AC1C3EBCBE00C47F0D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				D9F90EF71C3FC84B00A32CF6 /* WXLrcScrollView.h */,
+				D9F90EF81C3FC84B00A32CF6 /* WXLrcScrollView.m */,
+				D9F90EFA1C3FDB5A00A32CF6 /* WXLrcCell.h */,
+				D9F90EFB1C3FDB5A00A32CF6 /* WXLrcCell.m */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -631,8 +641,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9F90EFC1C3FDB5A00A32CF6 /* WXLrcCell.m in Sources */,
 				D93950AE1C3EBCBE00C47F0D /* AppDelegate.m in Sources */,
 				D93950B41C3EBCD000C47F0D /* WXMusicItem.m in Sources */,
+				D9F90EF91C3FC84B00A32CF6 /* WXLrcScrollView.m in Sources */,
 				D93950B81C3EC55B00C47F0D /* NSString+TimeExtension.m in Sources */,
 				D93950BB1C3EE38C00C47F0D /* CALayer+PauseAimate.m in Sources */,
 				D93950AF1C3EBCBE00C47F0D /* main.m in Sources */,
