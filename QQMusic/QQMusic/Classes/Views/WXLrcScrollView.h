@@ -10,6 +10,9 @@
 
 @interface WXLrcScrollView : UIScrollView
 
+/** 当前播放的时间 */
+@property (nonatomic, assign) NSTimeInterval currentTime;
+
 /** 歌词文件名 */
 @property (nonatomic, strong) NSString *lrcFileName;
 

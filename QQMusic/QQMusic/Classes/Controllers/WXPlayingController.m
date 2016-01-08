@@ -44,9 +44,11 @@
 
 #pragma mark - 成员属性
 /** 当前播放器 */
-@property (nonatomic ,strong)AVAudioPlayer *currentPlayer;
-/** 进度条定时器 */
-@property (nonatomic ,strong)NSTimer *progressTimer;
+@property (nonatomic ,strong) AVAudioPlayer *currentPlayer;
+/** 播放进度条定时器 */
+@property (nonatomic ,strong) NSTimer *progressTimer;
+/** 更新歌词定时器 */
+@property (nonatomic, strong) CADisplayLink *lrcTimer;
 
 @end
 
@@ -154,12 +156,16 @@
     [self removeProgressTimer];
     [self addProgressTimer];
     
-    // 6.设置默认当前音乐播放时间,总时长和进度条
+    // 6.添加更新歌词定时器
+    [self removeLrcTimer];
+    [self addLrcTimer];
+    
+    // 7.设置默认当前音乐播放时间,总时长和进度条
     [self updateProgressInfo];
     
 }
 
-#pragma mark - 定时器操作与动画
+#pragma mark - 播放进度定时器操作与动画
 - (void)addIconViewAnimate
 {
     // 1.创建核心动画,并设置期相关属性
@@ -205,7 +211,36 @@
     self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
 }
 
-#pragma mark - 进度条事件处理和拖动手势
+#pragma mark - 更新歌词定时器
+/** 创建用于更新歌词的定时器 */
+- (void)addLrcTimer
+{
+    // 1.创建更新歌词的定时器, CADisplayLink每秒执行60次
+    self.lrcTimer = [CADisplayLink displayLinkWithTarget:self selector:@selector(updateLrcInfo)];
+    
+    // SINGLE: 2.添加CADisplayLink到RunLoop
+    [self.lrcTimer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSRunLoopCommonModes];
+    
+}
+
+/** 移除用于更新歌词的定时器 */
+- (void)removeLrcTimer
+{
+    // 移除更新歌词定时器
+    [self.lrcTimer invalidate];
+    self.lrcTimer = nil;
+}
+
+/** 更新歌词的显示,每秒调用60次 */
+- (void)updateLrcInfo
+{
+    // 将当前播放时间传给歌词的scrollView
+    self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
+}
+
+
+
+#pragma mark - 播放进度条事件处理和拖动手势
 
 /** 监听进度条TouchDown事件 */
 - (IBAction)progressStart {

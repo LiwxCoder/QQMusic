@@ -18,6 +18,8 @@
 
 /** 歌词模型数组 数据源 */
 @property (nonatomic, strong) NSArray *lrcList;
+/** 记录当前播放歌词的下标*/
+@property (nonatomic ,assign)NSInteger currentIndex;
 
 @end
 
@@ -85,9 +87,14 @@
     self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height * 0.5, 0, self.tableView.bounds.size.height * 0.5, 0);
 }
 
+#pragma mark - 重写set方法
 /** 重写set方法来解析歌词 */
 - (void)setLrcFileName:(NSString *)lrcFileName
 {
+    // CARE: 0.切换音乐前,将当前播放的歌词清0,否则会出现当前音乐快播完后,手动切换下一首导致程序奔溃
+    // 奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界
+    self.currentIndex = 0;
+    
     // 1.保存歌词名
     _lrcFileName = lrcFileName;
     
@@ -98,11 +105,54 @@
     [self.tableView reloadData];
 }
 
+/** 重写当前播放时间set方法,该方法每秒会调用60次,因为外部用CADisplayLink定时器刷新歌词进度 */
+- (void)setCurrentTime:(NSTimeInterval)currentTime
+{
+    // 1.保存当前播放时间
+    _currentTime = currentTime;
+    
+    // 2.获取歌词的总数
+    NSInteger count = self.lrcList.count;
+    // 3.遍历歌词数组
+    for (NSInteger i = 0; i < count; i++) {
+        // 3.1 获取第i位置的歌词模型
+        WXLrcLineItem *currentLrcItem = self.lrcList[i];
+        
+        // 3.2 获取第i+1位置的歌词的模型
+        NSInteger nextIndex = i + 1;
+        WXLrcLineItem *nextLrcItem = nil;
+        if (nextIndex < count) {
+            nextLrcItem = self.lrcList[nextIndex];
+        }
+        
+        // 3.3 判断当前播放时间是否在第 i ~ i+1歌词之间  (i位置的时间 <= self.currentTime < i+1位置的时间)
+        // CARE: 因该方法每秒执行60次,考虑到内部刷新列表操作和性能问题,判断如果当前行是正在播放的歌词,就无需刷新,通过self.currentIndex != i,如果不等于i,才进入刷新列表
+        if ( (self.currentIndex != i) && (currentTime >= currentLrcItem.time && currentTime < nextLrcItem.time) ) {
+            
+            // 1.滚动当前正在播放的歌词到中心位置,实际是滚动到最顶部,因为之前有设置内边距顶部间距是ScrollView的一半
+            // SINGLE: 调用哪个tableView的滚动方法
+            NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [self.tableView scrollToRowAtIndexPath:currentIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
+            // 2.刷新上一行歌词,如果没刷新,会导致上一行的歌词字体样式和当前歌词的字体样式一样
+            NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
+            
+            // CARE: 3.记录当前滚动的歌词,下面刷新cell有用到self.currentIndex,此处顺序不能和以下相反
+            self.currentIndex = i;
+            
+            // 4.刷新当前行和上一行歌词
+            [self.tableView reloadRowsAtIndexPaths:@[currentIndexPath, previousIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+        }
+    }
+}
+
+/** 返回tableView的总行数 */
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.lrcList.count;
 }
 
+/** 返回cell */
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     // 1.创建cell
@@ -111,7 +161,20 @@
     // 2.取出数组中的模型数据
     WXLrcLineItem *item = self.lrcList[indexPath.row];
     
+    // 3.设置cell歌词数据
     cell.textLabel.text = item.name;
+    
+    // 4.设置当前歌词文字样式
+    if (indexPath.row == self.currentIndex) {
+        // 当前播放的歌词
+        cell.textLabel.textColor = [UIColor greenColor];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:18];
+    }else {
+        // 当前播放的歌词
+        cell.textLabel.textColor = [UIColor lightGrayColor];
+        cell.textLabel.font = [UIFont boldSystemFontOfSize:14];
+    }
+    
     return cell;
 }
 
