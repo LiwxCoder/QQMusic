@@ -10,4 +10,7 @@
 
 @interface WXLrcScrollView : UIScrollView
 
+/** 歌词文件名 */
+@property (nonatomic, strong) NSString *lrcFileName;
+
 @end

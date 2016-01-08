@@ -8,11 +8,16 @@
 
 #import "WXLrcScrollView.h"
 #import "WXLrcCell.h"
+#import "WXLrcTool.h"
+#import "WXLrcLineItem.h"
 #import <Masonry.h>
 
 @interface WXLrcScrollView () <UITableViewDataSource, UITableViewDelegate>
 /** 显示歌词的tableView */
 @property (nonatomic, weak) UITableView *tableView;
+
+/** 歌词模型数组 数据源 */
+@property (nonatomic, strong) NSArray *lrcList;
 
 @end
 
@@ -80,18 +85,37 @@
     self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height * 0.5, 0, self.tableView.bounds.size.height * 0.5, 0);
 }
 
+/** 重写set方法来解析歌词 */
+- (void)setLrcFileName:(NSString *)lrcFileName
+{
+    // 1.保存歌词名
+    _lrcFileName = lrcFileName;
+    
+    // 2.解析歌词,保存到数组
+    self.lrcList = [WXLrcTool lrcToolWithLrcFileName:lrcFileName];
+    
+    // 3.刷新tableView
+    [self.tableView reloadData];
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 20;
+    return self.lrcList.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    // 1.创建cell
     WXLrcCell *cell = [WXLrcCell lrcCellWithTableView:tableView];
+
+    // 2.取出数组中的模型数据
+    WXLrcLineItem *item = self.lrcList[indexPath.row];
     
-    cell.textLabel.text = [NSString stringWithFormat:@"%02ld. 测试", indexPath.row];
+    cell.textLabel.text = item.name;
     return cell;
 }
+
+
 
 
 @end

@@ -13,6 +13,8 @@
 #import "NSString+TimeExtension.h"
 #import "CALayer+PauseAimate.h"
 #import "WXLrcScrollView.h"
+
+#import "WXLrcTool.h"
 #import <Masonry.h>
 #import <AVFoundation/AVFoundation.h>
 
@@ -142,6 +144,8 @@
     self.totalLabel.text = [NSString stringWithTime:currentPlayer.duration];
     // 3.2 更新当前播放按钮的状态
     self.playOrPauseBtn.selected = self.currentPlayer.isPlaying;
+    // 3.3 设置当前播放的音乐的歌词
+    self.lrcScrollView.lrcFileName = playerMusicItem.lrcname;
     
     // 4.添加旋转动画
     [self addIconViewAnimate];
@@ -152,6 +156,7 @@
     
     // 6.设置默认当前音乐播放时间,总时长和进度条
     [self updateProgressInfo];
+    
 }
 
 #pragma mark - 定时器操作与动画

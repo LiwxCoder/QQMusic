@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		43A046562418F6D23209DF9F /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = AB9D1E8A781B4C8BA5089562 /* libPods.a */; };
+		D91E15701C3FF16100524042 /* WXLrcTool.m in Sources */ = {isa = PBXBuildFile; fileRef = D91E156F1C3FF16100524042 /* WXLrcTool.m */; };
+		D91E15731C3FF68F00524042 /* WXLrcLineItem.m in Sources */ = {isa = PBXBuildFile; fileRef = D91E15721C3FF68F00524042 /* WXLrcLineItem.m */; };
 		D939500A1C3EAA5300C47F0D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D93950081C3EAA5300C47F0D /* Main.storyboard */; };
 		D939500C1C3EAA5300C47F0D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D939500B1C3EAA5300C47F0D /* Assets.xcassets */; };
 		D939500F1C3EAA5300C47F0D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D939500D1C3EAA5300C47F0D /* LaunchScreen.storyboard */; };
@@ -87,6 +89,10 @@
 		3F094DE2C2E3D429089FB59A /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		AB9D1E8A781B4C8BA5089562 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		B83EF141940565461D7BEFAE /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D91E156E1C3FF16100524042 /* WXLrcTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXLrcTool.h; sourceTree = "<group>"; };
+		D91E156F1C3FF16100524042 /* WXLrcTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXLrcTool.m; sourceTree = "<group>"; };
+		D91E15711C3FF68F00524042 /* WXLrcLineItem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WXLrcLineItem.h; sourceTree = "<group>"; };
+		D91E15721C3FF68F00524042 /* WXLrcLineItem.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WXLrcLineItem.m; sourceTree = "<group>"; };
 		D9394FFC1C3EAA5300C47F0D /* QQMusic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = QQMusic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93950091C3EAA5300C47F0D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D939500B1C3EAA5300C47F0D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -370,6 +376,8 @@
 			children = (
 				D93950B21C3EBCD000C47F0D /* WXMusicItem.h */,
 				D93950B31C3EBCD000C47F0D /* WXMusicItem.m */,
+				D91E15711C3FF68F00524042 /* WXLrcLineItem.h */,
+				D91E15721C3FF68F00524042 /* WXLrcLineItem.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -392,6 +400,8 @@
 				D93950A91C3EBCBE00C47F0D /* WXAudioTool.m */,
 				D93950AA1C3EBCBE00C47F0D /* WXMusicTool.h */,
 				D93950AB1C3EBCBE00C47F0D /* WXMusicTool.m */,
+				D91E156E1C3FF16100524042 /* WXLrcTool.h */,
+				D91E156F1C3FF16100524042 /* WXLrcTool.m */,
 			);
 			path = Tools;
 			sourceTree = "<group>";
@@ -649,6 +659,8 @@
 				D93950BB1C3EE38C00C47F0D /* CALayer+PauseAimate.m in Sources */,
 				D93950AF1C3EBCBE00C47F0D /* main.m in Sources */,
 				D93950AD1C3EBCBE00C47F0D /* WXPlayingController.m in Sources */,
+				D91E15701C3FF16100524042 /* WXLrcTool.m in Sources */,
+				D91E15731C3FF68F00524042 /* WXLrcLineItem.m in Sources */,
 				D93950B11C3EBCBE00C47F0D /* WXMusicTool.m in Sources */,
 				D93950B01C3EBCBE00C47F0D /* WXAudioTool.m in Sources */,
 			);
