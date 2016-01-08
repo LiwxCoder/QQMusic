@@ -15,7 +15,7 @@
 #import <Masonry.h>
 #import <AVFoundation/AVFoundation.h>
 
-@interface WXPlayingController ()
+@interface WXPlayingController () <AVAudioPlayerDelegate>
 
 #pragma mark - 子控件
 /** 背景图片 */
@@ -73,6 +73,8 @@
     
     // 3.开始播放音乐
     AVAudioPlayer *currentPlayer = [WXAudioTool playMusicWithMusicName:playerMusicItem.filename];
+    // 3.0 设置代理,用来监听音乐播放完毕,实现自动切换到下一首的功能
+    currentPlayer.delegate = self;
     self.currentPlayer = currentPlayer;
     // 3.1 设置当前播放时间和音乐总时长
     self.currentLabel.text = [NSString stringWithTime:currentPlayer.currentTime];
@@ -224,6 +226,14 @@
     
     // 3.开始播放音乐
     [self playingMusic];
+}
+
+#pragma mark - <AVAudioPlayerDelegate>代理协议
+// SINGLE: 当前音乐播放完成后调用,在<AVAudioPlayerDelegate>代理协议中
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
+{
+    // 音乐播放完毕自动切换下一首
+    [self nextMusic];
 }
 
 #pragma mark - 初始化设置

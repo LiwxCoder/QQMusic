@@ -83,7 +83,7 @@ static NSMutableDictionary *_players;
 }
 
 
-#pragma mark - 播放音效API(SystemSoundID)
+#pragma mark - 播放短音效API(SystemSoundID)
 
 // REMARKS: 播放音效类方法
 /** 播放音效 */

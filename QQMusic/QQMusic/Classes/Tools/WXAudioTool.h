@@ -11,7 +11,7 @@
 
 @interface WXAudioTool : NSObject
 
-#pragma mark - 播放音乐API(AVAudioPlayer)
+#pragma mark - 播放短音乐API(AVAudioPlayer)
 /** 播放音乐 */
 + (AVAudioPlayer *)playMusicWithMusicName:(NSString *)musicName;
 
