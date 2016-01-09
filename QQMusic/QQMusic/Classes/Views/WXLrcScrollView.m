@@ -10,8 +10,12 @@
 #import "WXLrcCell.h"
 #import "WXLrcTool.h"
 #import "WXLrcLineItem.h"
-#import <Masonry.h>
 #import "WXLrcLabel.h"
+#import "WXMusicTool.h"
+#import "WXMusicItem.h"
+
+#import <Masonry.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 @interface WXLrcScrollView () <UITableViewDataSource, UITableViewDelegate>
 /** 显示歌词的tableView */
@@ -149,6 +153,9 @@
             
             // 4.刷新当前行和上一行歌词
             [self.tableView reloadRowsAtIndexPaths:@[currentIndexPath, previousIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+            // 5.设置重新绘制锁屏封面和歌词,锁屏界面
+            [self setupLockImage];
         }
         
         // 4.获取当前这句歌词,来获得当前播放的进度,传递当前歌词进度给cell中lrcLabel
@@ -198,6 +205,132 @@
     }
     
     return cell;
+}
+
+#pragma mark - 设置锁屏界面和锁屏歌词
+
+/** 绘制锁屏封面和歌词 */
+- (void)setupLockImage
+{
+    // 1.获取当前音乐的模型
+    WXMusicItem *currentMusicItem = [WXMusicTool playingMusic];
+    
+    // 2.从当前音乐模型取出封面图片
+    UIImage *currentImage = [UIImage imageNamed:currentMusicItem.icon];
+    
+    // 3.获取当前,上一行,下一行歌词
+    // 3.1 获取当前行歌词
+    WXLrcLineItem *currentLrcLine = self.lrcList[self.currentIndex];
+    
+    // 3.2 获取上一行歌词
+    NSInteger previousIndex = self.currentIndex - 1;
+    WXLrcLineItem *previousLrcLine = nil;
+    if (previousIndex >= 0) {
+        previousLrcLine = self.lrcList[previousIndex];
+    }
+    
+    // 3.3 获取下一行歌词
+    NSInteger nextIndex = self.currentIndex + 1;
+    WXLrcLineItem *nextLrcLine = nil;
+    if (nextIndex < self.lrcList.count) {
+        nextLrcLine = self.lrcList[nextIndex];
+    }
+    
+    // 4.绘制图片
+    // 4.1 开启和图片尺寸一样的上下文
+    UIGraphicsBeginImageContext(currentImage.size);
+    
+    // 4.2 绘制图片
+    [currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
+    
+    // 4.3 将歌词文字绘制上去
+    // 设置文字高度
+    CGFloat titleH = 25;
+    
+    // 4.3.1 绘制上一句歌词和下一句歌词
+    // SINGLE: 设置绘制文字居中
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    NSDictionary *otherAttr = @{
+                                NSFontAttributeName : [UIFont systemFontOfSize:12],
+                                NSForegroundColorAttributeName : [UIColor yellowColor],
+                                NSParagraphStyleAttributeName : paragraphStyle
+                                };
+    // 绘制上一句和下一句歌词(绘制到图片底部)
+    [previousLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 3, currentImage.size.width, titleH) withAttributes:otherAttr];
+    [nextLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH, currentImage.size.width, titleH) withAttributes:otherAttr];
+    
+    // 4.3.2 绘制当前行歌词文字
+    NSDictionary *currentAttr = @{
+                                  NSFontAttributeName : [UIFont systemFontOfSize:18],
+                                  NSForegroundColorAttributeName : [UIColor greenColor],
+                                  NSParagraphStyleAttributeName : paragraphStyle
+                                  };
+    [currentLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 2, currentImage.size.width, titleH) withAttributes:currentAttr];
+    
+    // 4.4 生成绘制好的图片
+    UIImage *lockImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // 4.5 关闭图形上下文
+    UIGraphicsEndImageContext();
+    
+    // 5.将生成的图片添加到锁屏的封面图片上
+    [self setupLockScreenInfoWithLockImage:lockImage];
+}
+
+// REMARKS: 设置锁屏界面
+/** 设置锁屏界面 */
+- (void)setupLockScreenInfoWithLockImage:(UIImage *)lockImage
+{
+    /*
+     // 媒体常量
+     MPMediaItemPropertyAlbumTitle           // 媒体音乐的标题（或名称）
+     MPMediaItemPropertyAlbumTrackCount
+     MPMediaItemPropertyAlbumTrackNumber
+     MPMediaItemPropertyArtist               // 作者
+     MPMediaItemPropertyArtwork              // 封面
+     MPMediaItemPropertyComposer             // 音乐剧作曲家的媒体项目
+     MPMediaItemPropertyDiscCount            // 光盘在包含媒体项目的专辑的数目
+     MPMediaItemPropertyDiscNumber
+     MPMediaItemPropertyGenre
+     MPMediaItemPropertyPersistentID
+     MPMediaItemPropertyPlaybackDuration     // 媒体项目的播放持续时间(当前播放时间)
+     MPMediaItemPropertyTitle                // 显示在作者和标题上面
+     */
+    
+    // REMARKS: 设置锁屏界面,MPNowPlayingInfoCenter锁屏中心类在MediaPlayer框架中,所以需导入MediaPlayer/MediaPlayer.h头文件
+    // 1.获取当前正在播放的音乐
+    WXMusicItem *playingMusicItem = [WXMusicTool playingMusic];
+    
+    // 2.获取锁屏中心
+    MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+    
+    // 3.设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
+    // 创建要可变字典,用来存放要显示在锁屏中心的信息
+    NSMutableDictionary *playingInfoDict = [NSMutableDictionary dictionary];
+    // 3.1 设置展示的音乐名称
+    [playingInfoDict setObject:playingMusicItem.name forKey:MPMediaItemPropertyAlbumTitle];
+    
+    // 3.2 设置展示的歌手名
+    [playingInfoDict setObject:playingMusicItem.singer forKey:MPMediaItemPropertyArtist];
+    
+    // 3.3 设置展示封面
+    MPMediaItemArtwork *artWork = [[MPMediaItemArtwork alloc] initWithImage:lockImage];
+    [playingInfoDict setObject:artWork forKey:MPMediaItemPropertyArtwork];
+    
+    // 3.4 设置音乐播放的总时间
+    [playingInfoDict setObject:@(self.duration) forKey:MPMediaItemPropertyPlaybackDuration];
+    
+    // 3.5 设置音乐当前播放的时间
+    [playingInfoDict setObject:@(self.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+    
+    //    [playingInfoDict setObject:@"sdfsfsdf" forKey:MPMediaItemPropertyTitle];
+    
+    // 3.6 将设置的字典信息赋给nowPlayingInfo属性
+    playingInfoCenter.nowPlayingInfo = playingInfoDict;
+    
+    // SINGLE: 4.让应用程序开启远程事件
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 
 

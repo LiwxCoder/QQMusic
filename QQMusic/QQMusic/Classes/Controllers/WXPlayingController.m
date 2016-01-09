@@ -71,8 +71,6 @@
     // 4.播放音乐
     [self playingMusic];
     
-    // 5.设置初始化锁屏界面
-    [self setupLockScreenInfo];
 }
 
 #pragma mark - 初始化设置
@@ -105,55 +103,6 @@
     }];
 }
 
-/** 设置初始化锁屏界面 */
-- (void)setupLockScreenInfo
-{
-    /*
-      MPMediaItemPropertyAlbumTitle
-      MPMediaItemPropertyAlbumTrackCount
-      MPMediaItemPropertyAlbumTrackNumber
-      MPMediaItemPropertyArtist
-      MPMediaItemPropertyArtwork
-      MPMediaItemPropertyComposer
-      MPMediaItemPropertyDiscCount
-      MPMediaItemPropertyDiscNumber
-      MPMediaItemPropertyGenre
-      MPMediaItemPropertyPersistentID
-      MPMediaItemPropertyPlaybackDuration
-      MPMediaItemPropertyTitle
-     */
-    // REMARKS: 设置锁屏界面,MPNowPlayingInfoCenter锁屏中心类在MediaPlayer框架中,所以需导入MediaPlayer/MediaPlayer.h头文件
-    // 1.获取当前正在播放的音乐
-    WXMusicItem *playingMusicItem = [WXMusicTool playingMusic];
-    
-    // 2.获取锁屏中心
-    MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-    
-    // 3.设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
-    // 创建要可变字典,用来存放要显示在锁屏中心的信息
-    NSMutableDictionary *playingInfoDict = [NSMutableDictionary dictionary];
-    // 3.1 设置展示的音乐名称
-    [playingInfoDict setObject:playingMusicItem.name forKey:MPMediaItemPropertyAlbumTitle];
-    
-    // 3.2 设置展示的歌手名
-    [playingInfoDict setObject:playingMusicItem.singer forKey:MPMediaItemPropertyArtist];
-    
-    // 3.3 设置展示封面
-    MPMediaItemArtwork *artWork = [[MPMediaItemArtwork alloc] initWithImage:[UIImage imageNamed:playingMusicItem.icon]];
-    [playingInfoDict setObject:artWork forKey:MPMediaItemPropertyArtwork];
-    
-    // 3.4 设置音乐播放的总时间
-    [playingInfoDict setObject:@(self.currentPlayer.duration) forKey:MPMediaItemPropertyPlaybackDuration];
-    
-    // 3.5 设置音乐当前播放的时间
-    [playingInfoDict setObject:@(self.currentPlayer.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-    
-    // 3.6 将设置的字典信息赋给nowPlayingInfo属性
-    playingInfoCenter.nowPlayingInfo = playingInfoDict;
-    
-    // SINGLE: 4.让应用程序开启远程事件
-    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
-}
 
 // SINGLE: view即将布局子控件的时候调用,在该方法中可以拿到子控件的真实尺寸
 - (void)viewWillLayoutSubviews
@@ -206,6 +155,8 @@
     self.playOrPauseBtn.selected = self.currentPlayer.isPlaying;
     // 3.3 设置当前播放的音乐的歌词
     self.lrcScrollView.lrcFileName = playerMusicItem.lrcname;
+    // 3.4 将当前播放的音乐的总时长传给lrcScrollView,用于做锁屏界面的总时长
+    self.lrcScrollView.duration = currentPlayer.duration;
     
     // 4.添加旋转动画
     [self addIconViewAnimate];
