@@ -24,7 +24,7 @@
     [super drawRect:rect];
     
     // 1.设置填充的颜色
-    [[UIColor redColor] set];
+    [[UIColor greenColor] set];
     
     // 2.设置要填充的尺寸,根据传递过来的歌词播放进度
     CGRect fullRect = CGRectMake(0, 0, self.bounds.size.width * self.progress, self.bounds.size.height);

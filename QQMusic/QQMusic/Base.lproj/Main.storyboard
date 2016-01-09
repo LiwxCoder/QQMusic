@@ -147,7 +147,7 @@
                                     <constraint firstAttribute="trailing" secondItem="dHB-Fe-Gkm" secondAttribute="trailing" id="yhZ-nq-bh3"/>
                                 </constraints>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="歌词Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQ2-cg-JDN">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="歌词Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bQ2-cg-JDN" customClass="WXLrcLabel">
                                 <rect key="frame" x="262" y="409" width="76" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="M0w-qe-7Xn"/>
@@ -202,7 +202,7 @@
                         <outlet property="albumView" destination="WxZ-0c-axe" id="klT-bo-uFR"/>
                         <outlet property="currentLabel" destination="354-RA-TRZ" id="fck-gZ-oaP"/>
                         <outlet property="iconView" destination="ZRi-oV-wBQ" id="kaO-hL-gwS"/>
-                        <outlet property="lrcLabel" destination="bQ2-cg-JDN" id="nQk-ID-aaW"/>
+                        <outlet property="lrcLabel" destination="bQ2-cg-JDN" id="QZ4-P4-PSF"/>
                         <outlet property="lrcScrollView" destination="lqX-Ys-d8N" id="dhO-Og-d6f"/>
                         <outlet property="playOrPauseBtn" destination="hgr-6Y-Mcw" id="Ecu-jx-AoM"/>
                         <outlet property="progressSlider" destination="4OD-9W-gFd" id="zbm-R9-IWv"/>

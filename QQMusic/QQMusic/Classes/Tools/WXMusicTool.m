@@ -24,7 +24,7 @@ static WXMusicItem *_playingMusicItem;
     // 获取所有音乐模型
     _musicItems = [WXMusicItem mj_objectArrayWithFilename:@"Musics.plist"];
     // 设置当前默认音乐
-    _playingMusicItem = _musicItems[1];
+    _playingMusicItem = _musicItems[4];
 }
 
 #pragma mark - 播放音乐操作

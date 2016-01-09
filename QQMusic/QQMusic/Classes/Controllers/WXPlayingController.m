@@ -13,6 +13,7 @@
 #import "NSString+TimeExtension.h"
 #import "CALayer+PauseAimate.h"
 #import "WXLrcScrollView.h"
+#import "WXLrcLabel.h"
 
 #import "WXLrcTool.h"
 #import <Masonry.h>
@@ -40,7 +41,7 @@
 /** 歌词的ScrollView */
 @property (weak, nonatomic) IBOutlet WXLrcScrollView *lrcScrollView;
 /** 歌词的Label */
-@property (weak, nonatomic) IBOutlet UILabel *lrcLabel;
+@property (weak, nonatomic) IBOutlet WXLrcLabel *lrcLabel;
 
 #pragma mark - 成员属性
 /** 当前播放器 */
@@ -63,11 +64,11 @@
     // SINGLE: 2.设置UISlider滑块图片
     [self.progressSlider setThumbImage:[UIImage imageNamed:@"player_slider_playback_thumb"] forState:UIControlStateNormal];
     
-    // 3.播放音乐
-    [self playingMusic];
-    
-    // 4.初始化歌词的ScrollView
+    // 3.初始化歌词的ScrollView,不能和以下播放音乐对换顺序,setupLrcScrollView方法内部需先让当前主界面Label成为lrcScrollView的属性,下面播放音乐设置第一行歌词才能显示在主界面,反之,第一行歌词将不会显示
     [self setupLrcScrollView];
+    
+    // 4.播放音乐
+    [self playingMusic];
 }
 
 #pragma mark - 初始化设置
@@ -79,6 +80,10 @@
 
     // 2.设置代理,也可以在storyboard设置代理
     self.lrcScrollView.delegate = self;
+    
+    self.lrcLabel.text = nil;
+    // 3.将主界面的歌词的Label传给lrcScrollView的一个属性 - >lrcLabel,让lrcScrollView为其文字属性,歌词进度赋值
+    self.lrcScrollView.lrcLabel = self.lrcLabel;
 }
 
 /** 给背景添加毛玻璃效果 */

@@ -101,6 +101,9 @@
     
     // 2.解析歌词,保存到数组
     self.lrcList = [WXLrcTool lrcToolWithLrcFileName:lrcFileName];
+    // CARE: 初始设置歌词的第0行
+    WXLrcLineItem *firstItem = self.lrcList[0];
+    self.lrcLabel.text = firstItem.name;
     
     // 3.刷新tableView
     [self.tableView reloadData];
@@ -135,6 +138,9 @@
             NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
             [self.tableView scrollToRowAtIndexPath:currentIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
             
+            // CARE: 刷新主界面歌词Label内容
+            self.lrcLabel.text = currentLrcItem.name;
+            
             // 2.刷新上一行歌词,如果没刷新,会导致上一行的歌词字体样式和当前歌词的字体样式一样
             NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
             
@@ -157,6 +163,8 @@
             
             // 3.设置歌词进度,传递给当前歌词进度给cell中lrcLabel
             lrcCell.lrcLabel.progress = progress;
+            // CARE: 将当前行歌词进度赋值给主界面传过来的歌词Label;
+            self.lrcLabel.progress = progress;
         }
     }
 }
