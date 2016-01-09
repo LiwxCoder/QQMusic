@@ -7,6 +7,7 @@
 //
 
 #import "AppDelegate.h"
+#import <AVFoundation/AVFoundation.h>
 
 @interface AppDelegate ()
 
@@ -16,7 +17,21 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    
+    // REMARKS: 项目配置后台可播放音视频
+    // SINGLE: 配置后台可播放音视频 工程文件->Capabilities -> Background modes ->Audio
+    // CARE: 模拟器上运行时,音乐可后台运行,但是真机运行默认是不能后台播放音视频的,必须在项目中配置以上操作(后台可播放音视频),需创建会话,设置会话类别为后台播放,并激活会话.
+    
+    // 为确保程序运行时会执行到以下设置音视频会话(后台播放会话)代码,所以放在didFinishLaunchingWithOptions方法中执行
+    // 1.创建会话
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    
+    // 2.设置类别为后台播放 AVAudioSessionCategoryPlayback: 类别为后台播放,该常量字符串在AVAudioSession.h中
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    // 3.激活会话
+    [session setActive:YES error:nil];
+    
     return YES;
 }
 

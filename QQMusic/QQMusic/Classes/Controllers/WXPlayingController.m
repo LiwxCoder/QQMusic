@@ -134,7 +134,6 @@
     // 1.获取当前音乐
     WXMusicItem *playerMusicItem = [WXMusicTool playingMusic];
     
-    
     // 2.更新子控件信息
     self.albumView.image = [UIImage imageNamed:playerMusicItem.icon];
     self.iconView.image = [UIImage imageNamed:playerMusicItem.icon];
