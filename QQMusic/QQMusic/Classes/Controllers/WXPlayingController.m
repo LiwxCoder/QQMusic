@@ -247,8 +247,6 @@
     self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 }
 
-
-
 #pragma mark - 播放进度条事件处理和拖动手势
 
 /** 监听进度条TouchDown事件 */
@@ -321,7 +319,7 @@
     
 }
 /** 上一首 */
-- (IBAction)previous {
+- (IBAction)previousMusic {
     // 1.获取上一首音乐
     WXMusicItem *previousMusicItem = [WXMusicTool previous];
     
@@ -345,8 +343,35 @@
 // SINGLE: 当前音乐播放完成后调用,在<AVAudioPlayerDelegate>代理协议中
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-    // 音乐播放完毕自动切换下一首
-    [self nextMusic];
+    // flag == YES 表示音乐播放正常停止,播放完毕自动切换到下一首
+    if (flag) {
+        // 音乐播放完毕自动切换下一首
+        [self nextMusic];
+    }
+}
+
+#pragma mark - 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
+// REMARKS: 监听远程时间,监听锁屏界面操作
+/** 监听远程事件 */
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    switch (event.subtype) {
+        case UIEventSubtypeRemoteControlPlay:
+        case UIEventSubtypeRemoteControlPause:
+            [self playOrPause];
+            break;
+            
+        case UIEventSubtypeRemoteControlPreviousTrack:
+            [self previousMusic];
+            break;
+            
+        case UIEventSubtypeRemoteControlNextTrack:
+            [self nextMusic];
+            break;
+            
+        default:
+            break;
+    }
 }
 
 #pragma mark - 设置状态栏样式

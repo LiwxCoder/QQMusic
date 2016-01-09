@@ -81,7 +81,7 @@
                                         <rect key="frame" x="174" y="56" width="64" height="64"/>
                                         <state key="normal" image="player_btn_pre_normal"/>
                                         <connections>
-                                            <action selector="previous" destination="BYZ-38-t0r" eventType="touchUpInside" id="y7u-GC-OJI"/>
+                                            <action selector="previousMusic" destination="BYZ-38-t0r" eventType="touchUpInside" id="kdO-Nv-WdG"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="02:30" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="354-RA-TRZ" userLabel="当前播放时间">

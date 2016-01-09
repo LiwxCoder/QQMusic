@@ -245,14 +245,14 @@
     
     // 4.3 将歌词文字绘制上去
     // 设置文字高度
-    CGFloat titleH = 25;
+    CGFloat titleH = 32;
     
     // 4.3.1 绘制上一句歌词和下一句歌词
     // SINGLE: 设置绘制文字居中
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentCenter;
     NSDictionary *otherAttr = @{
-                                NSFontAttributeName : [UIFont systemFontOfSize:12],
+                                NSFontAttributeName : [UIFont systemFontOfSize:18],
                                 NSForegroundColorAttributeName : [UIColor yellowColor],
                                 NSParagraphStyleAttributeName : paragraphStyle
                                 };
@@ -262,7 +262,7 @@
     
     // 4.3.2 绘制当前行歌词文字
     NSDictionary *currentAttr = @{
-                                  NSFontAttributeName : [UIFont systemFontOfSize:18],
+                                  NSFontAttributeName : [UIFont systemFontOfSize:24],
                                   NSForegroundColorAttributeName : [UIColor greenColor],
                                   NSParagraphStyleAttributeName : paragraphStyle
                                   };
