@@ -93,11 +93,12 @@
 }
 
 #pragma mark - 重写set方法
-/** 重写set方法来解析歌词 */
+/** 重写lrcFileName属性set方法来设置tableView中的歌词 */
 - (void)setLrcFileName:(NSString *)lrcFileName
 {
     // CARE: 0.切换音乐前,将当前播放的歌词清0,否则会出现当前音乐快播完后,手动切换下一首导致程序奔溃
     // 奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界
+    // 0.指向当前播放的歌词行数清0
     self.currentIndex = 0;
     
     // 1.保存歌词名
@@ -323,9 +324,7 @@
     
     // 3.5 设置音乐当前播放的时间
     [playingInfoDict setObject:@(self.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-    
-    //    [playingInfoDict setObject:@"sdfsfsdf" forKey:MPMediaItemPropertyTitle];
-    
+
     // 3.6 将设置的字典信息赋给nowPlayingInfo属性
     playingInfoCenter.nowPlayingInfo = playingInfoDict;
     

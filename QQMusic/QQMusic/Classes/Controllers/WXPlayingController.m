@@ -175,6 +175,34 @@
 }
 
 #pragma mark - 播放进度定时器操作与动画
+/** 创建播放进度定时器 */
+- (void)addProgressTimer
+{
+    // 1.创建定时器
+    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateProgressInfo) userInfo:nil repeats:YES];
+    
+    // 2.添加到RunLoop
+    [[NSRunLoop mainRunLoop] addTimer:self.progressTimer forMode:NSRunLoopCommonModes];
+}
+
+/** 移除播放进度定时器 */
+- (void)removeProgressTimer
+{
+    [self.progressTimer invalidate];
+    self.progressTimer = nil;
+}
+
+/** 实时更新播放进度信息 */
+- (void)updateProgressInfo {
+    // 1.更新当前音乐播放时间和当前音乐总时长
+    self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
+    self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
+    
+    // 2.更新进度条信息
+    self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
+}
+
+/** 歌手图标旋转动画 */
 - (void)addIconViewAnimate
 {
     // 1.创建核心动画,并设置期相关属性
@@ -191,33 +219,6 @@
     
     // 2.添加动画到self.iconView.layer
     [self.iconView.layer addAnimation:anim forKey:nil];
-}
-
-/** 创建用于进度条定时器 */
-- (void)addProgressTimer
-{
-    // 1.创建定时器
-    self.progressTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(updateProgressInfo) userInfo:nil repeats:YES];
-    
-    // 2.添加到RunLoop
-    [[NSRunLoop mainRunLoop] addTimer:self.progressTimer forMode:NSRunLoopCommonModes];
-}
-
-/** 移除定时器 */
-- (void)removeProgressTimer
-{
-    [self.progressTimer invalidate];
-    self.progressTimer = nil;
-}
-
-/** 更新进度条信息 */
-- (void)updateProgressInfo {
-    // 1.更新当前音乐播放时间和当前音乐总时长
-    self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
-    self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
-    
-    // 2.更新进度条信息
-    self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
 }
 
 #pragma mark - 更新歌词定时器
@@ -326,7 +327,7 @@
     // 2.播放上一首音乐
     [self playMusic:previousMusicItem];
 }
-/** 播放音乐 */
+/** 切换播放的音乐 */
 - (void)playMusic:(WXMusicItem *)music {
     // 1.获取当前音乐,并暂停播放
     WXMusicItem *curMusicItem = [WXMusicTool playingMusic];

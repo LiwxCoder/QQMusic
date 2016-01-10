@@ -18,7 +18,7 @@
 @property (nonatomic, assign) NSTimeInterval currentTime;
 
 /** 当前播放器的播放总时间*/
-@property (nonatomic ,assign)NSTimeInterval duration;
+@property (nonatomic ,assign) NSTimeInterval duration;
 
 /** 歌词文件名 */
 @property (nonatomic, strong) NSString *lrcFileName;

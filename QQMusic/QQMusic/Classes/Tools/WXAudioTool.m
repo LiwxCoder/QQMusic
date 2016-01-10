@@ -22,7 +22,7 @@ static NSMutableDictionary *_players;
     // 创建可变字典,用于存放播放音效SystemSoundID
     _soundIDs = [NSMutableDictionary dictionary];
     
-    // 创建可变字典,用于存放音乐
+    // 创建可变字典,用于存放音乐播放器AVAudioPlayer
     _players = [NSMutableDictionary dictionary];
 }
 
