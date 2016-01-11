@@ -25,11 +25,11 @@
 ![Alt text](./Snip20160108_1.png)
 - UILabel作为其他控件布局的参考控件注意点
 - 如果UILabel的(顶部Top或底部Bottom)作为其他控件布局的参考对象的时候,需对设置UILabel的高度约束.  高度约束如下图所示
-![Alt text](./Snip20160110_5.png) 
+![Alt text](./Snip20160110_5.png)
 
 ### 界面控件设置
 - 设置毛玻璃效果的几种方式
-- 美工做一张毛玻璃效果的图片  
+- 美工做一张毛玻璃效果的图片
 - 使用UIToolbar
 - 使用第三方框架
 - 使用coreImage
@@ -42,16 +42,16 @@
 /** 给背景添加毛玻璃效果 */
 - (void)setupBlur
 {
-// REMARKS: 添加毛玻璃效果
-// 1.创建toolBar,设置毛玻璃样式,添加到背景的view
-UIToolbar *toolBar = [[UIToolbar alloc] init];
-toolBar.barStyle = UIBarStyleBlack;
-[self.albumView addSubview:toolBar];
-
-// 2.toolBar添加约束
-[toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
-make.edges.equalTo(self.albumView);
-}];
+    // REMARKS: 添加毛玻璃效果
+    // 1.创建toolBar,设置毛玻璃样式,添加到背景的view
+    UIToolbar *toolBar = [[UIToolbar alloc] init];
+    toolBar.barStyle = UIBarStyleBlack;
+    [self.albumView addSubview:toolBar];
+    
+    // 2.toolBar添加约束
+    [toolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.edges.equalTo(self.albumView);
+    }];
 }
 ```
 
@@ -61,14 +61,14 @@ make.edges.equalTo(self.albumView);
 // SINGLE: view即将布局子控件的时候调用,在该方法中可以拿到子控件的真实尺寸
 - (void)viewWillLayoutSubviews
 {
-[super viewWillLayoutSubviews];
-
-// SINGLE: 设置ImageView为圆形
-self.iconView.layer.cornerRadius = self.iconView.frame.size.width * 0.5;
-self.iconView.layer.masksToBounds = YES;
-// SINGLE: 设置ImageView边框颜色,宽度
-self.iconView.layer.borderColor = [UIColor lightGrayColor].CGColor;
-self.iconView.layer.borderWidth = 5.0;
+    [super viewWillLayoutSubviews];
+    
+    // SINGLE: 设置ImageView为圆形
+    self.iconView.layer.cornerRadius = self.iconView.frame.size.width * 0.5;
+    self.iconView.layer.masksToBounds = YES;
+    // SINGLE: 设置ImageView边框颜色,宽度
+    self.iconView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    self.iconView.layer.borderWidth = 5.0;
 }
 ```
 
@@ -88,11 +88,11 @@ self.iconView.layer.borderWidth = 5.0;
 #pragma mark - 初始化设置
 /** 创建内存缓存 */
 + (void)initialize {
-// 创建可变字典,用于存放播放音效SystemSoundID
-_soundIDs = [NSMutableDictionary dictionary];
-
-// 创建可变字典,用于存放音乐播放器AVAudioPlayer
-_players = [NSMutableDictionary dictionary];
+    // 创建可变字典,用于存放播放音效SystemSoundID
+    _soundIDs = [NSMutableDictionary dictionary];
+    
+    // 创建可变字典,用于存放音乐播放器AVAudioPlayer
+    _players = [NSMutableDictionary dictionary];
 }
 ```
 
@@ -118,11 +118,11 @@ static NSMutableDictionary *_players;
 #pragma mark - 初始化设置
 /** 创建内存缓存 */
 + (void)initialize {
-// 创建可变字典,用于存放播放音效SystemSoundID
-_soundIDs = [NSMutableDictionary dictionary];
-
-// 创建可变字典,用于存放音乐播放器AVAudioPlayer
-_players = [NSMutableDictionary dictionary];
+    // 创建可变字典,用于存放播放音效SystemSoundID
+    _soundIDs = [NSMutableDictionary dictionary];
+    
+    // 创建可变字典,用于存放音乐播放器AVAudioPlayer
+    _players = [NSMutableDictionary dictionary];
 }
 
 
@@ -130,55 +130,55 @@ _players = [NSMutableDictionary dictionary];
 /** 播放音乐 */
 + (AVAudioPlayer *)playMusicWithMusicName:(NSString *)musicName
 {
-// 1.先从内存字典中获取播放器AVAudioPlayer
-AVAudioPlayer *player = _players[musicName];
-
-// 2.判断是否从内存获取到播放器,如果没有获取到,新建播放器
-if (player == nil) {
-// 2.1 获取音乐文件的url
-NSURL *url = [[NSBundle mainBundle] URLForResource:musicName withExtension:nil];
-if (url == nil) return nil;
-
-// 2.2 根据音频文件的url,创建播放器
-player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
-
-// 2.3 保存到内存缓存_players
-[_players setObject:player forKey:musicName];
-}
-
-// SINGLE: 3.播放音乐
-[player play];
-
-return player;
+    // 1.先从内存字典中获取播放器AVAudioPlayer
+    AVAudioPlayer *player = _players[musicName];
+    
+    // 2.判断是否从内存获取到播放器,如果没有获取到,新建播放器
+    if (player == nil) {
+        // 2.1 获取音乐文件的url
+        NSURL *url = [[NSBundle mainBundle] URLForResource:musicName withExtension:nil];
+        if (url == nil) return nil;
+        
+        // 2.2 根据音频文件的url,创建播放器
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+        
+        // 2.3 保存到内存缓存_players
+        [_players setObject:player forKey:musicName];
+    }
+    
+    // SINGLE: 3.播放音乐
+    [player play];
+    
+    return player;
 }
 
 /** 暂停音乐 */
 + (void)pauseMusicWithMusicName:(NSString *)musicName
 {
-// 1.从内存字典中取出播放器
-AVAudioPlayer *player = _players[musicName];
-
-// 2.如果内存中有获取到播放器,暂停播放
-if (player) {
-// SINGLE: 暂停播放
-[player pause];
-}
+    // 1.从内存字典中取出播放器
+    AVAudioPlayer *player = _players[musicName];
+    
+    // 2.如果内存中有获取到播放器,暂停播放
+    if (player) {
+        // SINGLE: 暂停播放
+        [player pause];
+    }
 }
 
 /** 停止音乐 */
 + (void)stopMusicWithMusicName:(NSString *)musicName
 {
-// 1.从内存字典中取出播放器
-AVAudioPlayer *player = _players[musicName];
-
-// 2.如果内存中有获取到播放器,停止播放
-if (player) {
-// SINGLE: 2.1 停止播放
-[player stop];
-// 2.2 从内存字典中移除
-[_players removeObjectForKey:musicName];
-player = nil;
-}
+    // 1.从内存字典中取出播放器
+    AVAudioPlayer *player = _players[musicName];
+    
+    // 2.如果内存中有获取到播放器,停止播放
+    if (player) {
+        // SINGLE: 2.1 停止播放
+        [player stop];
+        // 2.2 从内存字典中移除
+        [_players removeObjectForKey:musicName];
+        player = nil;
+    }
 }
 
 
@@ -188,26 +188,26 @@ player = nil;
 /** 播放音效 */
 + (void)playSoundWithSoundName:(NSString *)soundName
 {
-// 1.先从内存缓存获取soundID
-SystemSoundID soundID = [_soundIDs[soundName] unsignedIntValue];
-
-// 2.判断内存是否存在音效资源,内存没有音效资源,则创建
-if (soundID == 0) {
-// 2.1 若不存在, 创建音效资源url
-CFURLRef url = (__bridge CFURLRef)[[NSBundle mainBundle] URLForResource:soundName withExtension:nil];
-
-// 2.2 判断url是否为空,如果为空,说明资源不存在,直接退出
-if (url == nil) return;
-
-// 2.3 生成SystemSoundID
-AudioServicesCreateSystemSoundID(url, &soundID);
-
-// 2.4 存入可变字典内存缓存
-[_soundIDs setObject:@(soundID) forKey:soundName];
-}
-
-// 3.播放音效
-AudioServicesPlaySystemSound(soundID);
+    // 1.先从内存缓存获取soundID
+    SystemSoundID soundID = [_soundIDs[soundName] unsignedIntValue];
+    
+    // 2.判断内存是否存在音效资源,内存没有音效资源,则创建
+    if (soundID == 0) {
+        // 2.1 若不存在, 创建音效资源url
+        CFURLRef url = (__bridge CFURLRef)[[NSBundle mainBundle] URLForResource:soundName withExtension:nil];
+        
+        // 2.2 判断url是否为空,如果为空,说明资源不存在,直接退出
+        if (url == nil) return;
+        
+        // 2.3 生成SystemSoundID
+        AudioServicesCreateSystemSoundID(url, &soundID);
+        
+        // 2.4 存入可变字典内存缓存
+        [_soundIDs setObject:@(soundID) forKey:soundName];
+    }
+    
+    // 3.播放音效
+    AudioServicesPlaySystemSound(soundID);
 }
 
 @end
@@ -256,67 +256,67 @@ static WXMusicItem *_playingMusicItem;
 /** 获取所有音乐模型,设置当前默认音乐 */
 + (void)initialize
 {
-// 从plist文件中获取所有音乐模型
-_musicItems = [WXMusicItem mj_objectArrayWithFilename:@"Musics.plist"];
-// 设置当前默认音乐
-_playingMusicItem = _musicItems[4];
+    // 从plist文件中获取所有音乐模型
+    _musicItems = [WXMusicItem mj_objectArrayWithFilename:@"Musics.plist"];
+    // 设置当前默认音乐
+    _playingMusicItem = _musicItems[4];
 }
 
 #pragma mark - 播放音乐操作
 /** 获取所有的音乐 */
 + (NSArray *)musics
 {
-return _musicItems;
+    return _musicItems;
 }
 
 /** 获取正在播放的音乐(默认) */
 + (WXMusicItem *)playingMusic
 {
-return _playingMusicItem;
+    return _playingMusicItem;
 }
 
 /** 设置播放的音乐 */
 + (void)setupMusic:(WXMusicItem *)music
 {
-_playingMusicItem = music;
+    _playingMusicItem = music;
 }
 
 /** 获取上一首音乐 */
 + (WXMusicItem *)previous
 {
-// 1.获取当前音乐的下标值
-NSInteger currentIndex = [_musicItems indexOfObject:_playingMusicItem];
-
-// 2.获取上一首音乐的下标值,判断是否越界
-NSInteger previousIndex = currentIndex - 1;
-if (previousIndex < 0) {
-previousIndex = _musicItems.count - 1;
-}
-
-// 3.获取上一首的音乐
-WXMusicItem *previousMusicItem = _musicItems[previousIndex];
-
-// 4.返回上一首音乐
-return previousMusicItem;
+    // 1.获取当前音乐的下标值
+    NSInteger currentIndex = [_musicItems indexOfObject:_playingMusicItem];
+    
+    // 2.获取上一首音乐的下标值,判断是否越界
+    NSInteger previousIndex = currentIndex - 1;
+    if (previousIndex < 0) {
+        previousIndex = _musicItems.count - 1;
+    }
+    
+    // 3.获取上一首的音乐
+    WXMusicItem *previousMusicItem = _musicItems[previousIndex];
+    
+    // 4.返回上一首音乐
+    return previousMusicItem;
 }
 
 /** 获取下一首音乐 */
 + (WXMusicItem *)next
 {
-// 1.获取当前音乐的下标值
-NSInteger currentIndex = [_musicItems indexOfObject:_playingMusicItem];
-
-// 2.获取下一首音乐的下标值,判断是否越界
-NSInteger nextIndex = currentIndex + 1;
-if (nextIndex >= _musicItems.count) {
-nextIndex = 0;
-}
-
-// 3.获取下一首的音乐
-WXMusicItem *nextMusicItem = _musicItems[nextIndex];
-
-// 4.返回下一首音乐
-return nextMusicItem;
+    // 1.获取当前音乐的下标值
+    NSInteger currentIndex = [_musicItems indexOfObject:_playingMusicItem];
+    
+    // 2.获取下一首音乐的下标值,判断是否越界
+    NSInteger nextIndex = currentIndex + 1;
+    if (nextIndex >= _musicItems.count) {
+        nextIndex = 0;
+    }
+    
+    // 3.获取下一首的音乐
+    WXMusicItem *nextMusicItem = _musicItems[nextIndex];
+    
+    // 4.返回下一首音乐
+    return nextMusicItem;
 }
 @end
 ```
@@ -327,43 +327,43 @@ return nextMusicItem;
 #pragma mark - 播放音乐
 - (void)playingMusic
 {
-// 1.获取当前音乐
-WXMusicItem *playerMusicItem = [WXMusicTool playingMusic];
-
-// 2.更新子控件信息
-self.albumView.image = [UIImage imageNamed:playerMusicItem.icon];
-self.iconView.image = [UIImage imageNamed:playerMusicItem.icon];
-self.songLabel.text = playerMusicItem.name;
-self.singerLabel.text = playerMusicItem.singer;
-
-// 3.开始播放音乐
-AVAudioPlayer *currentPlayer = [WXAudioTool playMusicWithMusicName:playerMusicItem.filename];
-// 3.0 设置代理,用来监听音乐播放完毕,实现自动切换到下一首的功能
-currentPlayer.delegate = self;
-self.currentPlayer = currentPlayer;
-// 3.1 设置当前播放时间和音乐总时长
-self.currentLabel.text = [NSString stringWithTime:currentPlayer.currentTime];
-self.totalLabel.text = [NSString stringWithTime:currentPlayer.duration];
-// 3.2 更新当前播放按钮的状态
-self.playOrPauseBtn.selected = self.currentPlayer.isPlaying;
-// 3.3 设置当前播放的音乐的歌词
-self.lrcScrollView.lrcFileName = playerMusicItem.lrcname;
-// 3.4 将当前播放的音乐的总时长传给lrcScrollView,用于做锁屏界面的总时长
-self.lrcScrollView.duration = currentPlayer.duration;
-
-// 4.添加旋转动画
-[self addIconViewAnimate];
-
-// 5.添加定时器(需先移除定时器在添加,避免当前定时器还在运行,又开启新定时器)
-[self removeProgressTimer];
-[self addProgressTimer];
-
-// 6.添加更新歌词定时器
-[self removeLrcTimer];
-[self addLrcTimer];
-
-// 7.设置默认当前音乐播放时间,总时长和进度条
-[self updateProgressInfo];
+    // 1.获取当前音乐
+    WXMusicItem *playerMusicItem = [WXMusicTool playingMusic];
+    
+    // 2.更新子控件信息
+    self.albumView.image = [UIImage imageNamed:playerMusicItem.icon];
+    self.iconView.image = [UIImage imageNamed:playerMusicItem.icon];
+    self.songLabel.text = playerMusicItem.name;
+    self.singerLabel.text = playerMusicItem.singer;
+    
+    // 3.开始播放音乐
+    AVAudioPlayer *currentPlayer = [WXAudioTool playMusicWithMusicName:playerMusicItem.filename];
+    // 3.0 设置代理,用来监听音乐播放完毕,实现自动切换到下一首的功能
+    currentPlayer.delegate = self;
+    self.currentPlayer = currentPlayer;
+    // 3.1 设置当前播放时间和音乐总时长
+    self.currentLabel.text = [NSString stringWithTime:currentPlayer.currentTime];
+    self.totalLabel.text = [NSString stringWithTime:currentPlayer.duration];
+    // 3.2 更新当前播放按钮的状态
+    self.playOrPauseBtn.selected = self.currentPlayer.isPlaying;
+    // 3.3 设置当前播放的音乐的歌词
+    self.lrcScrollView.lrcFileName = playerMusicItem.lrcname;
+    // 3.4 将当前播放的音乐的总时长传给lrcScrollView,用于做锁屏界面的总时长
+    self.lrcScrollView.duration = currentPlayer.duration;
+    
+    // 4.添加旋转动画
+    [self addIconViewAnimate];
+    
+    // 5.添加定时器(需先移除定时器在添加,避免当前定时器还在运行,又开启新定时器)
+    [self removeProgressTimer];
+    [self addProgressTimer];
+    
+    // 6.添加更新歌词定时器
+    [self removeLrcTimer];
+    [self addLrcTimer];
+    
+    // 7.设置默认当前音乐播放时间,总时长和进度条
+    [self updateProgressInfo];
 }
 ```
 
@@ -381,12 +381,12 @@ self.lrcScrollView.duration = currentPlayer.duration;
 - 更新进度进度实现
 ```objectivec
 - (void)updateProgressInfo {
-// 1.更新当前音乐播放时间和当前音乐总时长
-self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
-self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
-
-// 2.更新进度条信息
-self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
+    // 1.更新当前音乐播放时间和当前音乐总时长
+    self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
+    self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
+    
+    // 2.更新进度条信息
+    self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
 }
 ```
 
@@ -395,20 +395,20 @@ self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.
 ```objectivec
 - (void)addIconViewAnimate
 {
-// 1.创建核心动画,并设置期相关属性
-CABasicAnimation *anim = [CABasicAnimation animation];
-// 1.1 设置绕z轴旋转360°,无限循环等
-anim.keyPath = @"transform.rotation.z";
-anim.fromValue = @(0);
-anim.toValue = @(M_PI * 2);
-anim.repeatCount = CGFLOAT_MAX;
-anim.duration = 35;
-// SINGLE: 1.2 当进入后台,再进入前台时,核心动画会失效,需设置removedOnCompletion属性为NO,这样核心动画就不会失效
-// removedOnCompletion: 设置为NO表示动画完成的时候不要移除.
-anim.removedOnCompletion = NO;
-
-// 2.添加动画到self.iconView.layer
-[self.iconView.layer addAnimation:anim forKey:nil];
+    // 1.创建核心动画,并设置期相关属性
+    CABasicAnimation *anim = [CABasicAnimation animation];
+    // 1.1 设置绕z轴旋转360°,无限循环等
+    anim.keyPath = @"transform.rotation.z";
+    anim.fromValue = @(0);
+    anim.toValue = @(M_PI * 2);
+    anim.repeatCount = CGFLOAT_MAX;
+    anim.duration = 35;
+    // SINGLE: 1.2 当进入后台,再进入前台时,核心动画会失效,需设置removedOnCompletion属性为NO,这样核心动画就不会失效
+    // removedOnCompletion: 设置为NO表示动画完成的时候不要移除.
+    anim.removedOnCompletion = NO;
+    
+    // 2.添加动画到self.iconView.layer
+    [self.iconView.layer addAnimation:anim forKey:nil];
 }
 ```
 
@@ -423,21 +423,21 @@ anim.removedOnCompletion = NO;
 /** layoutSubviews中布局子控件tableView */
 - (void)layoutSubviews
 {
-[super layoutSubviews];
-// 1.布局tableView
-[self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
-make.top.equalTo(self.mas_top);
-make.bottom.equalTo(self.mas_bottom);
-make.height.equalTo(self.mas_height);
-make.left.equalTo(self.mas_left).offset(self.bounds.size.width);
-make.right.equalTo(self.mas_right);
-make.width.equalTo(self.mas_width);
-}];
-
-// SINGLE: 2.清空tableView背景颜色,取消tableView的分割线,设置tableView的内边距
-self.tableView.backgroundColor = [UIColor clearColor];
-self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height * 0.5, 0, self.tableView.bounds.size.height * 0.5, 0);
+    [super layoutSubviews];
+    // 1.布局tableView
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.mas_top);
+        make.bottom.equalTo(self.mas_bottom);
+        make.height.equalTo(self.mas_height);
+        make.left.equalTo(self.mas_left).offset(self.bounds.size.width);
+        make.right.equalTo(self.mas_right);
+        make.width.equalTo(self.mas_width);
+    }];
+    
+    // SINGLE: 2.清空tableView背景颜色,取消tableView的分割线,设置tableView的内边距
+    self.tableView.backgroundColor = [UIColor clearColor];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height * 0.5, 0, self.tableView.bounds.size.height * 0.5, 0);
 }
 ```
 
@@ -446,10 +446,10 @@ self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height
 > 在storyboard中设置播放按钮在Normal/Selected状态下的按钮显示的图片
 ### 播放/暂停,上一首,下一首功能实现
 - 播放/暂停功能实现
-- 切换播放按钮的状态 
+- 切换播放按钮的状态
 - 判断是否正在播放,如果当前正在播放则暂停播放,反之则继续播放
-- 暂停播放: 暂停播放,移除定时器,暂停动画(分类实现暂停和继续动画) 
-- 继续播放: 继续播放,开启定时器,继续动画 
+- 暂停播放: 暂停播放,移除定时器,暂停动画(分类实现暂停和继续动画)
+- 继续播放: 继续播放,开启定时器,继续动画
 - 上一首/下一首功能实现
 - 使用WXMusicTool工具类获取上一首/下一首音乐
 - 实现切换音乐的方法
@@ -457,33 +457,33 @@ self.tableView.contentInset = UIEdgeInsetsMake(self.tableView.bounds.size.height
 ```objectivec
 /** 下一首 */
 - (IBAction)nextMusic {
-
-// 1.获取下一首音乐
-WXMusicItem *nextMusicItem = [WXMusicTool next];
-
-// 2.播放下一首音乐
-[self playMusic:nextMusicItem];
-
+    
+    // 1.获取下一首音乐
+    WXMusicItem *nextMusicItem = [WXMusicTool next];
+    
+    // 2.播放下一首音乐
+    [self playMusic:nextMusicItem];
+    
 }
 /** 上一首 */
 - (IBAction)previousMusic {
-// 1.获取上一首音乐
-WXMusicItem *previousMusicItem = [WXMusicTool previous];
-
-// 2.播放上一首音乐
-[self playMusic:previousMusicItem];
+    // 1.获取上一首音乐
+    WXMusicItem *previousMusicItem = [WXMusicTool previous];
+    
+    // 2.播放上一首音乐
+    [self playMusic:previousMusicItem];
 }
 /** 切换播放的音乐 */
 - (void)playMusic:(WXMusicItem *)music {
-// 1.获取当前音乐,并暂停播放
-WXMusicItem *curMusicItem = [WXMusicTool playingMusic];
-[WXAudioTool pauseMusicWithMusicName:curMusicItem.filename];
-
-// 2.设置当前播放音乐music
-[WXMusicTool setupMusic:music];
-
-// 3.开始播放音乐
-[self playingMusic];
+    // 1.获取当前音乐,并暂停播放
+    WXMusicItem *curMusicItem = [WXMusicTool playingMusic];
+    [WXAudioTool pauseMusicWithMusicName:curMusicItem.filename];
+    
+    // 2.设置当前播放音乐music
+    [WXMusicTool setupMusic:music];
+    
+    // 3.开始播放音乐
+    [self playingMusic];
 }
 ```
 
@@ -497,11 +497,11 @@ self.currentPlayer.delegate = self;
 // SINGLE: 当前音乐播放完成后调用,在<AVAudioPlayerDelegate>代理协议中
 - (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag
 {
-// flag == YES 表示音乐播放正常停止,播放完毕自动切换到下一首
-if (flag) {
-// 音乐播放完毕自动切换下一首
-[self nextMusic];
-}
+    // flag == YES 表示音乐播放正常停止,播放完毕自动切换到下一首
+    if (flag) {
+        // 音乐播放完毕自动切换下一首
+        [self nextMusic];
+    }
 }
 ```
 
@@ -521,27 +521,27 @@ self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * se
 ```objectivec
 /** 监听进度条点击Tap手势 */
 - (IBAction)sliderTap:(UITapGestureRecognizer *)sender {
-// 1.获取当前点的位置
-CGPoint curPoint = [sender locationInView:sender.view];
-
-// 2.获取当前点与总进度的比例
-CGFloat ratio = curPoint.x / self.progressSlider.bounds.size.width;
-
-// 3.更新当前播放器的播放时间
-self.currentPlayer.currentTime = ratio * self.currentPlayer.duration;
-
-// 4.更新当前播放时间Label,总时长Label的信息和进度条信息,因为updateProgressInfo方法使用self.currentPlayer.currentTime值,所以必须在第3步执行完才能执行updateProgressInfo方法,如果顺序反之,则不行
-[self updateProgressInfo];
+    // 1.获取当前点的位置
+    CGPoint curPoint = [sender locationInView:sender.view];
+    
+    // 2.获取当前点与总进度的比例
+    CGFloat ratio = curPoint.x / self.progressSlider.bounds.size.width;
+    
+    // 3.更新当前播放器的播放时间
+    self.currentPlayer.currentTime = ratio * self.currentPlayer.duration;
+    
+    // 4.更新当前播放时间Label,总时长Label的信息和进度条信息,因为updateProgressInfo方法使用self.currentPlayer.currentTime值,所以必须在第3步执行完才能执行updateProgressInfo方法,如果顺序反之,则不行
+    [self updateProgressInfo];
 }
 
 /** 实时更新播放进度信息 */
 - (void)updateProgressInfo {
-// 1.更新当前音乐播放时间和当前音乐总时长
-self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
-self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
-
-// 2.更新进度条信息
-self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
+    // 1.更新当前音乐播放时间和当前音乐总时长
+    self.currentLabel.text = [NSString stringWithTime:self.currentPlayer.currentTime];
+    self.totalLabel.text = [NSString stringWithTime:self.currentPlayer.duration];
+    
+    // 2.更新进度条信息
+    self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.duration;
 }
 ```
 
@@ -559,42 +559,42 @@ self.progressSlider.value = self.currentPlayer.currentTime / self.currentPlayer.
 /** 创建WXLrcLineItem的对象方法 */
 - (instancetype)initWithLrcLineString:(NSString *)lrcLineString
 {
-if (self = [super init]) {
-// 1.解析歌词
-[self lrcStringToItem:lrcLineString];
-}
-return self;
+    if (self = [super init]) {
+        // 1.解析歌词
+        [self lrcStringToItem:lrcLineString];
+    }
+    return self;
 }
 
 /** 创建WXLrcLineItem的类方法 */
 + (instancetype)lrcLineItemWithLrcLineString:(NSString *)lrcLineString
 {
-return [[self alloc] initWithLrcLineString:lrcLineString];
+    return [[self alloc] initWithLrcLineString:lrcLineString];
 }
 
 /** 解析歌词 */
 - (void)lrcStringToItem:(NSString *)lrcLineString
 {
-// 歌词数据: [00:33.20]只是因为在人群中多看了你一眼
-// 1.以"]"切割歌词与时间
-NSArray *lrcArray = [lrcLineString componentsSeparatedByString:@"]"];
-
-// 2.解析出歌词内容 只是因为在人群中多看了你一眼
-self.name = lrcArray[1];
-
-// 3.解析时间 [00:31.25
-NSString *timeString = lrcArray[0];
-self.time = [self timeWithTimeString:[timeString substringFromIndex:1]];
+    // 歌词数据: [00:33.20]只是因为在人群中多看了你一眼
+    // 1.以"]"切割歌词与时间
+    NSArray *lrcArray = [lrcLineString componentsSeparatedByString:@"]"];
+    
+    // 2.解析出歌词内容 只是因为在人群中多看了你一眼
+    self.name = lrcArray[1];
+    
+    // 3.解析时间 [00:31.25
+    NSString *timeString = lrcArray[0];
+    self.time = [self timeWithTimeString:[timeString substringFromIndex:1]];
 }
 
 /** 解析时间 时间数据: 00:31.25 */
 - (NSTimeInterval)timeWithTimeString:(NSString *)timeString {
-
-NSInteger min = [[timeString componentsSeparatedByString:@":"][0] integerValue];
-NSInteger sec = [[timeString substringWithRange:NSMakeRange(3, 2)] integerValue];
-NSInteger mSec = [[timeString componentsSeparatedByString:@"."][1] integerValue];
-
-return min * 60 + sec + mSec * 0.01;
+    
+    NSInteger min = [[timeString componentsSeparatedByString:@":"][0] integerValue];
+    NSInteger sec = [[timeString substringWithRange:NSMakeRange(3, 2)] integerValue];
+    NSInteger mSec = [[timeString componentsSeparatedByString:@"."][1] integerValue];
+    
+    return min * 60 + sec + mSec * 0.01;
 }
 @end
 ```
@@ -605,37 +605,37 @@ return min * 60 + sec + mSec * 0.01;
 /** 传入本地歌词文件名,解析歌词文件 */
 + (NSArray *)lrcToolWithLrcFileName:(NSString *)lrcFileName
 {
-// 1.获取歌词的路径
-NSString *filePath = [[NSBundle mainBundle] pathForResource:lrcFileName ofType:nil];
-
-// 2.读取歌词文件数据
-NSString *lrcString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
-
-// SINGLE: 3.通过\n字符切割到数组
-NSArray *lrcArray = [lrcString componentsSeparatedByString:@"\n"];
-
-/** 
-歌词文件头部信息
-[ti:]
-[ar:]
-[al:]
-*/
-// 4.遍历数组,将数组转模型
-NSMutableArray *lrcArrayM = [NSMutableArray array];
-for (NSString *lrcLineString in lrcArray) {
-// 1.过滤歌词文件头部无用信息,不是以[开头的也过滤掉
-if ([lrcLineString hasPrefix:@"[ti:"] || [lrcLineString hasPrefix:@"[ar:"] || [lrcLineString hasPrefix:@"[al:"] || ![lrcLineString hasPrefix:@"["]) {
-continue;
-}
-
-// 2.解析歌词数据到模型
-WXLrcLineItem *lrcItem = [WXLrcLineItem lrcLineItemWithLrcLineString:lrcLineString];
-
-// 3.添加到可变数组
-[lrcArrayM addObject:lrcItem];
-}
-
-return lrcArrayM;
+    // 1.获取歌词的路径
+    NSString *filePath = [[NSBundle mainBundle] pathForResource:lrcFileName ofType:nil];
+    
+    // 2.读取歌词文件数据
+    NSString *lrcString = [NSString stringWithContentsOfFile:filePath encoding:NSUTF8StringEncoding error:nil];
+    
+    // SINGLE: 3.通过\n字符切割到数组
+    NSArray *lrcArray = [lrcString componentsSeparatedByString:@"\n"];
+    
+    /**
+     歌词文件头部信息
+     [ti:]
+     [ar:]
+     [al:]
+     */
+    // 4.遍历数组,将数组转模型
+    NSMutableArray *lrcArrayM = [NSMutableArray array];
+    for (NSString *lrcLineString in lrcArray) {
+        // 1.过滤歌词文件头部无用信息,不是以[开头的也过滤掉
+        if ([lrcLineString hasPrefix:@"[ti:"] || [lrcLineString hasPrefix:@"[ar:"] || [lrcLineString hasPrefix:@"[al:"] || ![lrcLineString hasPrefix:@"["]) {
+            continue;
+        }
+        
+        // 2.解析歌词数据到模型
+        WXLrcLineItem *lrcItem = [WXLrcLineItem lrcLineItemWithLrcLineString:lrcLineString];
+        
+        // 3.添加到可变数组
+        [lrcArrayM addObject:lrcItem];
+    }
+    
+    return lrcArrayM;
 }
 ```
 
@@ -655,19 +655,19 @@ self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 ```objectivec
 - (void)drawRect:(CGRect)rect
 {
-[super drawRect:rect];
-
-// 1.设置填充的颜色
-[[UIColor greenColor] set];
-
-// 2.设置要填充的尺寸,根据传递过来的歌词播放进度
-CGRect fullRect = CGRectMake(0, 0, self.bounds.size.width * self.progress, self.bounds.size.height);
-
-// 3.开始绘制
-// SINGLE: UIRectFill会填充Label颜色,不是填充文字颜色
-//    UIRectFill(fullRect);
-// SINGLE: UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn)填充文字,kCGBlendModeSourceOut:表示填充文字以外的区域
-UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn);
+    [super drawRect:rect];
+    
+    // 1.设置填充的颜色
+    [[UIColor greenColor] set];
+    
+    // 2.设置要填充的尺寸,根据传递过来的歌词播放进度
+    CGRect fullRect = CGRectMake(0, 0, self.bounds.size.width * self.progress, self.bounds.size.height);
+    
+    // 3.开始绘制
+    // SINGLE: UIRectFill会填充Label颜色,不是填充文字颜色
+    //    UIRectFill(fullRect);
+    // SINGLE: UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn)填充文字,kCGBlendModeSourceOut:表示填充文字以外的区域
+    UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn);
 }
 ```
 - 重写progress当前行歌词播放的进度,用于刷新重绘Label,在方法内部调用setNeedsDisplay重绘Label
@@ -678,22 +678,22 @@ UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn);
 ```objectivec
 - (void)setLrcFileName:(NSString *)lrcFileName
 {
-// CARE: 0.切换音乐前,将当前播放的歌词清0,否则会出现当前音乐快播完后,手动切换下一首导致程序奔溃
-// 奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界
-// 0.指向当前播放的歌词行数清0
-self.currentIndex = 0;
-
-// 1.保存歌词名
-_lrcFileName = lrcFileName;
-
-// 2.解析歌词,保存到数组
-self.lrcList = [WXLrcTool lrcToolWithLrcFileName:lrcFileName];
-// CARE: 初始设置歌词的第0行
-WXLrcLineItem *firstItem = self.lrcList[0];
-self.lrcLabel.text = firstItem.name;
-
-// 3.刷新tableView
-[self.tableView reloadData];
+    // CARE: 0.切换音乐前,将当前播放的歌词清0,否则会出现当前音乐快播完后,手动切换下一首导致程序奔溃
+    // 奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界
+    // 0.指向当前播放的歌词行数清0
+    self.currentIndex = 0;
+    
+    // 1.保存歌词名
+    _lrcFileName = lrcFileName;
+    
+    // 2.解析歌词,保存到数组
+    self.lrcList = [WXLrcTool lrcToolWithLrcFileName:lrcFileName];
+    // CARE: 初始设置歌词的第0行
+    WXLrcLineItem *firstItem = self.lrcList[0];
+    self.lrcLabel.text = firstItem.name;
+    
+    // 3.刷新tableView
+    [self.tableView reloadData];
 }
 ```
 
@@ -712,64 +712,64 @@ self.lrcLabel.text = firstItem.name;
 /** 重写当前播放时间set方法,该方法每秒会调用60次,因为外部用CADisplayLink定时器刷新歌词进度 */
 - (void)setCurrentTime:(NSTimeInterval)currentTime
 {
-// 1.保存当前播放时间
-_currentTime = currentTime;
-
-// 2.获取歌词的总数
-NSInteger count = self.lrcList.count;
-// 3.遍历歌词数组
-for (NSInteger i = 0; i < count; i++) {
-// 3.1 获取第i位置的歌词模型
-WXLrcLineItem *currentLrcItem = self.lrcList[i];
-
-// 3.2 获取第i+1位置的歌词的模型
-NSInteger nextIndex = i + 1;
-WXLrcLineItem *nextLrcItem = nil;
-if (nextIndex < count) {
-nextLrcItem = self.lrcList[nextIndex];
-}
-
-// 3.3 判断当前播放时间是否在第 i ~ i+1歌词之间  (i位置的时间 <= self.currentTime < i+1位置的时间)
-// CARE: 因该方法每秒执行60次,考虑到内部刷新列表操作和性能问题,判断如果当前行是正在播放的歌词,就无需刷新,通过self.currentIndex != i,如果不等于i,才进入刷新列表
-if ( (self.currentIndex != i) && (currentTime >= currentLrcItem.time && currentTime < nextLrcItem.time) ) {
-
-// 1.滚动当前正在播放的歌词到中心位置,实际是滚动到最顶部,因为之前有设置内边距顶部间距是ScrollView的一半
-// SINGLE: 调用哪个tableView的滚动方法
-NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
-[self.tableView scrollToRowAtIndexPath:currentIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
-
-// CARE: 刷新主界面歌词Label内容
-self.lrcLabel.text = currentLrcItem.name;
-
-// 2.刷新上一行歌词,如果没刷新,会导致上一行的歌词字体样式和当前歌词的字体样式一样
-NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
-
-// CARE: 3.记录当前滚动的歌词,下面刷新cell有用到self.currentIndex,此处顺序不能和以下相反
-self.currentIndex = i;
-
-// 4.刷新当前行和上一行歌词
-[self.tableView reloadRowsAtIndexPaths:@[currentIndexPath, previousIndexPath] withRowAnimation:UITableViewRowAnimationNone];
-
-// 5.设置重新绘制锁屏封面和歌词,锁屏界面
-[self setupLockImage];
-}
-
-// 4.获取当前这句歌词,来获得当前播放的进度,传递当前歌词进度给cell中lrcLabel
-if (self.currentIndex == i) {
-
-// SINGLE: 1.获取当前行歌词进度 当前行歌词进度 = (当前播放的时间 - 当前行歌词的开始时间) / (下一行歌词的开始时间 - 当前行歌词的开始时间)
-CGFloat progress = (currentTime - currentLrcItem.time) / (nextLrcItem.time - currentLrcItem.time);
-
-// 2.获取当前显示歌词的cell
-NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
-WXLrcCell *lrcCell = [self.tableView cellForRowAtIndexPath:indexPath];
-
-// 3.设置歌词进度,传递给当前歌词进度给cell中lrcLabel
-lrcCell.lrcLabel.progress = progress;
-// CARE: 将当前行歌词进度赋值给主界面传过来的歌词Label;
-self.lrcLabel.progress = progress;
-}
-}
+    // 1.保存当前播放时间
+    _currentTime = currentTime;
+    
+    // 2.获取歌词的总数
+    NSInteger count = self.lrcList.count;
+    // 3.遍历歌词数组
+    for (NSInteger i = 0; i < count; i++) {
+        // 3.1 获取第i位置的歌词模型
+        WXLrcLineItem *currentLrcItem = self.lrcList[i];
+        
+        // 3.2 获取第i+1位置的歌词的模型
+        NSInteger nextIndex = i + 1;
+        WXLrcLineItem *nextLrcItem = nil;
+        if (nextIndex < count) {
+            nextLrcItem = self.lrcList[nextIndex];
+        }
+        
+        // 3.3 判断当前播放时间是否在第 i ~ i+1歌词之间  (i位置的时间 <= self.currentTime < i+1位置的时间)
+        // CARE: 因该方法每秒执行60次,考虑到内部刷新列表操作和性能问题,判断如果当前行是正在播放的歌词,就无需刷新,通过self.currentIndex != i,如果不等于i,才进入刷新列表
+        if ( (self.currentIndex != i) && (currentTime >= currentLrcItem.time && currentTime < nextLrcItem.time) ) {
+            
+            // 1.滚动当前正在播放的歌词到中心位置,实际是滚动到最顶部,因为之前有设置内边距顶部间距是ScrollView的一半
+            // SINGLE: 调用哪个tableView的滚动方法
+            NSIndexPath *currentIndexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            [self.tableView scrollToRowAtIndexPath:currentIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
+            
+            // CARE: 刷新主界面歌词Label内容
+            self.lrcLabel.text = currentLrcItem.name;
+            
+            // 2.刷新上一行歌词,如果没刷新,会导致上一行的歌词字体样式和当前歌词的字体样式一样
+            NSIndexPath *previousIndexPath = [NSIndexPath indexPathForRow:self.currentIndex inSection:0];
+            
+            // CARE: 3.记录当前滚动的歌词,下面刷新cell有用到self.currentIndex,此处顺序不能和以下相反
+            self.currentIndex = i;
+            
+            // 4.刷新当前行和上一行歌词
+            [self.tableView reloadRowsAtIndexPaths:@[currentIndexPath, previousIndexPath] withRowAnimation:UITableViewRowAnimationNone];
+            
+            // 5.设置重新绘制锁屏封面和歌词,锁屏界面
+            [self setupLockImage];
+        }
+        
+        // 4.获取当前这句歌词,来获得当前播放的进度,传递当前歌词进度给cell中lrcLabel
+        if (self.currentIndex == i) {
+            
+            // SINGLE: 1.获取当前行歌词进度 当前行歌词进度 = (当前播放的时间 - 当前行歌词的开始时间) / (下一行歌词的开始时间 - 当前行歌词的开始时间)
+            CGFloat progress = (currentTime - currentLrcItem.time) / (nextLrcItem.time - currentLrcItem.time);
+            
+            // 2.获取当前显示歌词的cell
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:i inSection:0];
+            WXLrcCell *lrcCell = [self.tableView cellForRowAtIndexPath:indexPath];
+            
+            // 3.设置歌词进度,传递给当前歌词进度给cell中lrcLabel
+            lrcCell.lrcLabel.progress = progress;
+            // CARE: 将当前行歌词进度赋值给主界面传过来的歌词Label;
+            self.lrcLabel.progress = progress;
+        }
+    }
 }
 ```
 
@@ -788,15 +788,15 @@ self.lrcScrollView.lrcLabel = self.lrcLabel;
 /** 监听歌词的lrcScrollView的拖动 */
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-// 1.获取当前点
-CGPoint curPoint = scrollView.contentOffset;
-
-// 2.通过偏移量获取滑动的比例
-CGFloat ratio = (1 - curPoint.x / self.lrcScrollView.bounds.size.width);
-
-// 3.改变主界面中间歌手图片iconView和主界面单行歌词的透明度
-self.iconView.alpha = ratio;
-self.lrcLabel.alpha = ratio;
+    // 1.获取当前点
+    CGPoint curPoint = scrollView.contentOffset;
+    
+    // 2.通过偏移量获取滑动的比例
+    CGFloat ratio = (1 - curPoint.x / self.lrcScrollView.bounds.size.width);
+    
+    // 3.改变主界面中间歌手图片iconView和主界面单行歌词的透明度
+    self.iconView.alpha = ratio;
+    self.lrcLabel.alpha = ratio;
 }
 ```
 
@@ -857,53 +857,53 @@ playingInfoCenter.nowPlayingInfo = playingInfoDict;
 /** 设置锁屏界面 */
 - (void)setupLockScreenInfoWithLockImage:(UIImage *)lockImage
 {
-/*
-// 媒体常量
-MPMediaItemPropertyAlbumTitle           // 媒体音乐的标题（或名称）
-MPMediaItemPropertyAlbumTrackCount
-MPMediaItemPropertyAlbumTrackNumber
-MPMediaItemPropertyArtist               // 作者
-MPMediaItemPropertyArtwork              // 封面
-MPMediaItemPropertyComposer             // 音乐剧作曲家的媒体项目
-MPMediaItemPropertyDiscCount            // 光盘在包含媒体项目的专辑的数目
-MPMediaItemPropertyDiscNumber
-MPMediaItemPropertyGenre
-MPMediaItemPropertyPersistentID
-MPMediaItemPropertyPlaybackDuration     // 媒体项目的播放持续时间(当前播放时间)
-MPMediaItemPropertyTitle                // 显示在作者和标题上面
-*/
-
-// REMARKS: 设置锁屏界面,MPNowPlayingInfoCenter锁屏中心类在MediaPlayer框架中,所以需导入MediaPlayer/MediaPlayer.h头文件
-// 1.获取当前正在播放的音乐
-WXMusicItem *playingMusicItem = [WXMusicTool playingMusic];
-
-// 2.获取锁屏中心
-MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-
-// 3.设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
-// 创建要可变字典,用来存放要显示在锁屏中心的信息
-NSMutableDictionary *playingInfoDict = [NSMutableDictionary dictionary];
-// 3.1 设置展示的音乐名称
-[playingInfoDict setObject:playingMusicItem.name forKey:MPMediaItemPropertyAlbumTitle];
-
-// 3.2 设置展示的歌手名
-[playingInfoDict setObject:playingMusicItem.singer forKey:MPMediaItemPropertyArtist];
-
-// 3.3 设置展示封面
-MPMediaItemArtwork *artWork = [[MPMediaItemArtwork alloc] initWithImage:lockImage];
-[playingInfoDict setObject:artWork forKey:MPMediaItemPropertyArtwork];
-
-// 3.4 设置音乐播放的总时间
-[playingInfoDict setObject:@(self.duration) forKey:MPMediaItemPropertyPlaybackDuration];
-
-// 3.5 设置音乐当前播放的时间
-[playingInfoDict setObject:@(self.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-
-// 3.6 将设置的字典信息赋给nowPlayingInfo属性
-playingInfoCenter.nowPlayingInfo = playingInfoDict;
-
-// SINGLE: 4.让应用程序开启远程事件
-[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    /*
+     // 媒体常量
+     MPMediaItemPropertyAlbumTitle           // 媒体音乐的标题（或名称）
+     MPMediaItemPropertyAlbumTrackCount
+     MPMediaItemPropertyAlbumTrackNumber
+     MPMediaItemPropertyArtist               // 作者
+     MPMediaItemPropertyArtwork              // 封面
+     MPMediaItemPropertyComposer             // 音乐剧作曲家的媒体项目
+     MPMediaItemPropertyDiscCount            // 光盘在包含媒体项目的专辑的数目
+     MPMediaItemPropertyDiscNumber
+     MPMediaItemPropertyGenre
+     MPMediaItemPropertyPersistentID
+     MPMediaItemPropertyPlaybackDuration     // 媒体项目的播放持续时间(当前播放时间)
+     MPMediaItemPropertyTitle                // 显示在作者和标题上面
+     */
+    
+    // REMARKS: 设置锁屏界面,MPNowPlayingInfoCenter锁屏中心类在MediaPlayer框架中,所以需导入MediaPlayer/MediaPlayer.h头文件
+    // 1.获取当前正在播放的音乐
+    WXMusicItem *playingMusicItem = [WXMusicTool playingMusic];
+    
+    // 2.获取锁屏中心
+    MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+    
+    // 3.设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
+    // 创建要可变字典,用来存放要显示在锁屏中心的信息
+    NSMutableDictionary *playingInfoDict = [NSMutableDictionary dictionary];
+    // 3.1 设置展示的音乐名称
+    [playingInfoDict setObject:playingMusicItem.name forKey:MPMediaItemPropertyAlbumTitle];
+    
+    // 3.2 设置展示的歌手名
+    [playingInfoDict setObject:playingMusicItem.singer forKey:MPMediaItemPropertyArtist];
+    
+    // 3.3 设置展示封面
+    MPMediaItemArtwork *artWork = [[MPMediaItemArtwork alloc] initWithImage:lockImage];
+    [playingInfoDict setObject:artWork forKey:MPMediaItemPropertyArtwork];
+    
+    // 3.4 设置音乐播放的总时间
+    [playingInfoDict setObject:@(self.duration) forKey:MPMediaItemPropertyPlaybackDuration];
+    
+    // 3.5 设置音乐当前播放的时间
+    [playingInfoDict setObject:@(self.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
+    
+    // 3.6 将设置的字典信息赋给nowPlayingInfo属性
+    playingInfoCenter.nowPlayingInfo = playingInfoDict;
+    
+    // SINGLE: 4.让应用程序开启远程事件
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
 }
 ```
 
@@ -918,69 +918,97 @@ playingInfoCenter.nowPlayingInfo = playingInfoDict;
 /** 绘制锁屏封面和歌词 */
 - (void)setupLockImage
 {
-// 1.获取当前音乐的模型
-WXMusicItem *currentMusicItem = [WXMusicTool playingMusic];
-
-// 2.从当前音乐模型取出封面图片
-UIImage *currentImage = [UIImage imageNamed:currentMusicItem.icon];
-
-// 3.获取当前,上一行,下一行歌词
-// 3.1 获取当前行歌词
-WXLrcLineItem *currentLrcLine = self.lrcList[self.currentIndex];
-
-// 3.2 获取上一行歌词
-NSInteger previousIndex = self.currentIndex - 1;
-WXLrcLineItem *previousLrcLine = nil;
-if (previousIndex >= 0) {
-previousLrcLine = self.lrcList[previousIndex];
+    // 1.获取当前音乐的模型
+    WXMusicItem *currentMusicItem = [WXMusicTool playingMusic];
+    
+    // 2.从当前音乐模型取出封面图片
+    UIImage *currentImage = [UIImage imageNamed:currentMusicItem.icon];
+    
+    // 3.获取当前,上一行,下一行歌词
+    // 3.1 获取当前行歌词
+    WXLrcLineItem *currentLrcLine = self.lrcList[self.currentIndex];
+    
+    // 3.2 获取上一行歌词
+    NSInteger previousIndex = self.currentIndex - 1;
+    WXLrcLineItem *previousLrcLine = nil;
+    if (previousIndex >= 0) {
+        previousLrcLine = self.lrcList[previousIndex];
+    }
+    
+    // 3.3 获取下一行歌词
+    NSInteger nextIndex = self.currentIndex + 1;
+    WXLrcLineItem *nextLrcLine = nil;
+    if (nextIndex < self.lrcList.count) {
+        nextLrcLine = self.lrcList[nextIndex];
+    }
+    
+    // 4.绘制图片
+    // 4.1 开启和图片尺寸一样的上下文
+    UIGraphicsBeginImageContext(currentImage.size);
+    
+    // 4.2 绘制图片
+    [currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
+    
+    // 4.3 将歌词文字绘制上去
+    // 设置文字高度
+    CGFloat titleH = 32;
+    
+    // 4.3.1 绘制上一句歌词和下一句歌词
+    // SINGLE: 设置绘制文字居中
+    NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+    paragraphStyle.alignment = NSTextAlignmentCenter;
+    NSDictionary *otherAttr = @{
+                                NSFontAttributeName : [UIFont systemFontOfSize:18],
+                                NSForegroundColorAttributeName : [UIColor yellowColor],
+                                NSParagraphStyleAttributeName : paragraphStyle
+                                };
+    // 绘制上一句和下一句歌词(绘制到图片底部)
+    [previousLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 3, currentImage.size.width, titleH) withAttributes:otherAttr];
+    [nextLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH, currentImage.size.width, titleH) withAttributes:otherAttr];
+    
+    // 4.3.2 绘制当前行歌词文字
+    NSDictionary *currentAttr = @{
+                                  NSFontAttributeName : [UIFont systemFontOfSize:24],
+                                  NSForegroundColorAttributeName : [UIColor greenColor],
+                                  NSParagraphStyleAttributeName : paragraphStyle
+                                  };
+    [currentLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 2, currentImage.size.width, titleH) withAttributes:currentAttr];
+    
+    // 4.4 生成绘制好的图片
+    UIImage *lockImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // 4.5 关闭图形上下文
+    UIGraphicsEndImageContext();
+    
+    // 5.将生成的图片添加到锁屏的封面图片上
+    [self setupLockScreenInfoWithLockImage:lockImage];
 }
+```
 
-// 3.3 获取下一行歌词
-NSInteger nextIndex = self.currentIndex + 1;
-WXLrcLineItem *nextLrcLine = nil;
-if (nextIndex < self.lrcList.count) {
-nextLrcLine = self.lrcList[nextIndex];
-}
-
-// 4.绘制图片
-// 4.1 开启和图片尺寸一样的上下文
-UIGraphicsBeginImageContext(currentImage.size);
-
-// 4.2 绘制图片
-[currentImage drawInRect:CGRectMake(0, 0, currentImage.size.width, currentImage.size.height)];
-
-// 4.3 将歌词文字绘制上去
-// 设置文字高度
-CGFloat titleH = 32;
-
-// 4.3.1 绘制上一句歌词和下一句歌词
-// SINGLE: 设置绘制文字居中
-NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-paragraphStyle.alignment = NSTextAlignmentCenter;
-NSDictionary *otherAttr = @{
-NSFontAttributeName : [UIFont systemFontOfSize:18],
-NSForegroundColorAttributeName : [UIColor yellowColor],
-NSParagraphStyleAttributeName : paragraphStyle
-};
-// 绘制上一句和下一句歌词(绘制到图片底部)
-[previousLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 3, currentImage.size.width, titleH) withAttributes:otherAttr];
-[nextLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH, currentImage.size.width, titleH) withAttributes:otherAttr];
-
-// 4.3.2 绘制当前行歌词文字
-NSDictionary *currentAttr = @{
-NSFontAttributeName : [UIFont systemFontOfSize:24],
-NSForegroundColorAttributeName : [UIColor greenColor],
-NSParagraphStyleAttributeName : paragraphStyle
-};
-[currentLrcLine.name drawInRect:CGRectMake(0, currentImage.size.height - titleH * 2, currentImage.size.width, titleH) withAttributes:currentAttr];
-
-// 4.4 生成绘制好的图片
-UIImage *lockImage = UIGraphicsGetImageFromCurrentImageContext();
-
-// 4.5 关闭图形上下文
-UIGraphicsEndImageContext();
-
-// 5.将生成的图片添加到锁屏的封面图片上
-[self setupLockScreenInfoWithLockImage:lockImage];
+### 锁屏界面实现播放,暂停,上一首,下一首功能
+- 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
+```objectivec
+#pragma mark - 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
+// REMARKS: 监听远程事件,监听锁屏界面操作
+/** 监听远程事件 */
+- (void)remoteControlReceivedWithEvent:(UIEvent *)event
+{
+    switch (event.subtype) {
+        case UIEventSubtypeRemoteControlPlay:
+        case UIEventSubtypeRemoteControlPause:
+            [self playOrPause];
+            break;
+            
+        case UIEventSubtypeRemoteControlPreviousTrack:
+            [self previousMusic];
+            break;
+            
+        case UIEventSubtypeRemoteControlNextTrack:
+            [self nextMusic];
+            break;
+            
+        default:
+            break;
+    }
 }
 ```
