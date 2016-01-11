@@ -38,7 +38,7 @@
 - 设置背景**毛玻璃**效果
 - 本示例使用UIToolbar做毛玻璃效果
 - 示例代码
-```
+```objectivec
 /** 给背景添加毛玻璃效果 */
 - (void)setupBlur
 {
