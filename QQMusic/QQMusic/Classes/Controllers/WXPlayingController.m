@@ -352,26 +352,26 @@
 }
 
 #pragma mark - 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
-// REMARKS: 监听远程时间,监听锁屏界面操作
+// REMARKS: 监听远程事件,监听锁屏界面操作
 /** 监听远程事件 */
 - (void)remoteControlReceivedWithEvent:(UIEvent *)event
 {
     switch (event.subtype) {
-        case UIEventSubtypeRemoteControlPlay:
-        case UIEventSubtypeRemoteControlPause:
-            [self playOrPause];
-            break;
-            
-        case UIEventSubtypeRemoteControlPreviousTrack:
-            [self previousMusic];
-            break;
-            
-        case UIEventSubtypeRemoteControlNextTrack:
-            [self nextMusic];
-            break;
-            
-        default:
-            break;
+    case UIEventSubtypeRemoteControlPlay:
+    case UIEventSubtypeRemoteControlPause:
+        [self playOrPause];
+        break;
+        
+    case UIEventSubtypeRemoteControlPreviousTrack:
+        [self previousMusic];
+        break;
+        
+    case UIEventSubtypeRemoteControlNextTrack:
+        [self nextMusic];
+        break;
+        
+    default:
+        break;
     }
 }
 
