@@ -1,43 +1,86 @@
-# 32.音视频播放-01 QQ音乐界面搭建 (自己整理)
+# QQ音乐
 
-@(iOS Study)[音视频播放]
 
-- 作者: <font size="3" color="Peru">Liwx</font>
-- 邮箱: <font size="3" color="Peru">1032282633@qq.com</font>
+- 作者: Liwx
+- 邮箱: 1032282633@qq.com
 
 ---
-
-[TOC]
+> 目录
+- 02.音视频播放 QQ音乐界面搭建 (自己整理)
+- QQ音乐界面搭建
+  - 1.storyboard布局QQ音乐界面
+    - QQ音乐主界面整体框图
+    - 界面控件设置
+  - 2.实现音乐的播放
+    - 封装WXAudioTool播放音效和播放音乐工具类
+    - 播放音效/音乐工具类实现步骤
+    - 封装WXMusicTool获取音乐列表工具类
+    - 在主控制器实现播放音乐
+  - 3.添加播放进度定时器,更新播放进度
+    - 实现更新播放进度功能和歌手图标旋转功能
+    - 实时更新播放进度信息
+    - 歌手图标旋转动画
+  - 4.处理滚动条
+    - 自定义滚动歌词的WXLrcScrollView,继承UIScrollView
+  - 5.播放/暂停,上一首,下一首功能实现,音乐播放完毕自动切换到下一首
+    - 播放/暂停,上一首,下一首功能实现
+    - 音乐播放完毕自动切换到下一首
+  - 6.设置进度条UISlider的处理
+    - 监听进度条的事件
+    - 进度条添加Tap敲击手势
+  - 7.歌词的解析
+    - 歌词模型类功能的实现
+    - 创建歌词文件处理WXLrcTool工具类
+  - 8.实现歌词ScrollView歌词的滚动功能
+    - 主界面控制器创建更新歌词的定时器CADisplayLink定时器
+    - 自定义显示歌词的WXLrcLabel
+    - 实现歌词的滚动,当前行歌词进度颜色填充效果
+  - 10.设置主界面的歌词
+    - 在主界面中设置主界面歌词
+    - 由lrcScrollView内部为主界面歌词内容和进度进行更新
+  - 11.实现锁屏界面信息展示和操作
+    - 锁屏界面项目配置
+  - 12.实现锁屏锁屏歌词展示
+    - 绘制锁屏封面和歌词
+    - 锁屏界面实现播放,暂停,上一首,下一首功能
 
 ---
 
 # QQ音乐界面搭建
 - QQ音乐运行效果(模拟器不能演示锁屏界面的功能,所以展示效果图没有锁屏界面功能展示)
-![Alt text](./QQMusic.gif)
+    
+![1.QQ音乐运行效果.gif](http://upload-images.jianshu.io/upload_images/1253159-72808594067824f2.gif?imageMogr2/auto-orient/strip)
 
 ---
 ## 1.storyboard布局QQ音乐界面
 ### QQ音乐主界面整体框图
 - 界面效果图
-![Alt text](./Snip20160110_4.png)
+   
+![2.QQ音乐主界面整体框图.png](http://upload-images.jianshu.io/upload_images/1253159-4158e02338e3b08c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
 
 - UISlider添加手势
-![Alt text](./Snip20160108_1.png)
-- UILabel作为其他控件布局的参考控件注意点
-- 如果UILabel的(顶部Top或底部Bottom)作为其他控件布局的参考对象的时候,需对设置UILabel的高度约束.  高度约束如下图所示
-![Alt text](./Snip20160110_5.png)
 
+![3.UISlider添加手势.png](http://upload-images.jianshu.io/upload_images/1253159-13fb0b9964eec160.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)    
+
+- UILabel作为其他控件布局的参考控件注意点
+    - 如果UILabel的(顶部Top或底部Bottom)作为其他控件布局的参考对象的时候,需对设置UILabel的高度约束.  高度约束如下图所示
+   
+![4.高度约束.png](http://upload-images.jianshu.io/upload_images/1253159-7fdb80a47882d001.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+    
 ### 界面控件设置
 - 设置毛玻璃效果的几种方式
-- 美工做一张毛玻璃效果的图片
-- 使用UIToolbar
-- 使用第三方框架
-- 使用coreImage
-- 使用UIVisualEffectView (Blur)
-![Alt text](./1452410858326.png)
+    - 美工做一张毛玻璃效果的图片  
+    - 使用UIToolbar
+    - 使用第三方框架
+    - 使用coreImage
+    - 使用UIVisualEffectView (Blur)
+
+![5.使用UIVisualEffectView (Blur).png](http://upload-images.jianshu.io/upload_images/1253159-a0771d7de4fcee41.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)        
+
 - 设置背景**毛玻璃**效果
-- 本示例使用UIToolbar做毛玻璃效果
-- 示例代码
+    - 本示例使用UIToolbar做毛玻璃效果
+    - 示例代码
+
 ```objectivec
 /** 给背景添加毛玻璃效果 */
 - (void)setupBlur
@@ -56,7 +99,8 @@
 ```
 
 - 设置歌手图标圆角效果
-- 在**view即将布局子控件**的时候调用`viewWillLayoutSubviews方法`,该方法中可以获取`子控件的真实尺寸`
+    - 在**view即将布局子控件**的时候调用`viewWillLayoutSubviews方法`,该方法中可以获取`子控件的真实尺寸`
+
 ```objectivec
 // SINGLE: view即将布局子控件的时候调用,在该方法中可以拿到子控件的真实尺寸
 - (void)viewWillLayoutSubviews
@@ -71,7 +115,7 @@
     self.iconView.layer.borderWidth = 5.0;
 }
 ```
-
+ 
 - 设置UISlider滚动条`滑块图片`
 ```objectivec
 // SINGLE: 2.设置UISlider滑块图片
@@ -83,27 +127,30 @@
 ### 封装WXAudioTool播放音效和播放音乐工具类
 #### 播放音效/音乐工具类实现步骤
 - 1.创建一个可变字典用于存放`音乐播放器AVAudioPlayer`,创建一个可变字典用于存放`播放音效SystemSoundID`,作为音乐播放器和音效播放的内存缓存.
-- 音乐播放器和音效播放器缓存只需创建一次,所以将其放在initialize方法中进行初始化操作.示例代码如下
+    - 音乐播放器和音效播放器缓存只需创建一次,所以将其放在initialize方法中进行初始化操作.示例代码如下
+
 ```objectivec
 #pragma mark - 初始化设置
 /** 创建内存缓存 */
 + (void)initialize {
-    // 创建可变字典,用于存放播放音效SystemSoundID
-    _soundIDs = [NSMutableDictionary dictionary];
-    
-    // 创建可变字典,用于存放音乐播放器AVAudioPlayer
-    _players = [NSMutableDictionary dictionary];
+// 创建可变字典,用于存放播放音效SystemSoundID
+_soundIDs = [NSMutableDictionary dictionary];
+
+// 创建可变字典,用于存放音乐播放器AVAudioPlayer
+_players = [NSMutableDictionary dictionary];
 }
 ```
 
 - 2.WXAudioTool工具类实现播放等API接口方法
-- 实现播放音乐,暂停音乐,停止音乐和播放音效API接口方法
-**播放音乐:** + (AVAudioPlayer *)playMusicWithMusicName:(NSString *)musicName;
-**暂停音乐:** + (void)pauseMusicWithMusicName:(NSString *)musicName;
-**停止音乐:** + (void)stopMusicWithMusicName:(NSString *)musicName;
-**播放音效:** + (void)playSoundWithSoundName:(NSString *)soundName;
-
+    - 实现播放音乐,暂停音乐,停止音乐和播放音效API接口方法
+   
+   **播放音乐:** + (AVAudioPlayer *)playMusicWithMusicName:(NSString *)musicName;
+    **暂停音乐:** + (void)pauseMusicWithMusicName:(NSString *)musicName;
+    **停止音乐:** + (void)stopMusicWithMusicName:(NSString *)musicName;
+    **播放音效:** + (void)playSoundWithSoundName:(NSString *)soundName;
+    
 - 3.WXAudioTool工具类实现代码
+
 ```objectivec
 #import "WXAudioTool.h"
 #import <AVFoundation/AVFoundation.h>
@@ -138,7 +185,7 @@ static NSMutableDictionary *_players;
         // 2.1 获取音乐文件的url
         NSURL *url = [[NSBundle mainBundle] URLForResource:musicName withExtension:nil];
         if (url == nil) return nil;
-        
+
         // 2.2 根据音频文件的url,创建播放器
         player = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
         
@@ -215,6 +262,7 @@ static NSMutableDictionary *_players;
 
 ### 封装WXMusicTool获取音乐列表工具类
 - 1.创建WXMusicItem音乐模型
+
 ```objectivec
 @interface WXMusicItem : NSObject
 /** 音乐名 */
@@ -232,14 +280,15 @@ static NSMutableDictionary *_players;
 @end
 ```
 - 2.WXMusicTool工具类实现API接口方法
-- 实现播放音乐,暂停音乐,停止音乐和播放音效API接口方法
-**获取所有的音乐:** + (NSArray *)musics;
-**获取正在播放的音乐:** + (WXMusicItem *)playingMusic;
-**设置播放的音乐:** + (void)setupMusic:(WXMusicItem *)music;
-**获取上一首音乐:** + (WXMusicItem *)previous;
-**获取下一首音乐:** + (WXMusicItem *)next;
+    - 实现播放音乐,暂停音乐,停止音乐和播放音效API接口方法
+    **获取所有的音乐:** + (NSArray *)musics;
+    **获取正在播放的音乐:** + (WXMusicItem *)playingMusic;
+    **设置播放的音乐:** + (void)setupMusic:(WXMusicItem *)music;
+    **获取上一首音乐:** + (WXMusicItem *)previous;
+    **获取下一首音乐:** + (WXMusicItem *)next;
 
 - 3.WXMusicTool工具类实现代码
+
 ```objectivec
 #import "WXMusicTool.h"
 #import "WXMusicItem.h"
@@ -320,9 +369,10 @@ static WXMusicItem *_playingMusicItem;
 }
 @end
 ```
-
+  
 ### 在主控制器实现播放音乐
 - 播放音乐实现
+
 ```objectivec
 #pragma mark - 播放音乐
 - (void)playingMusic
@@ -374,11 +424,12 @@ static WXMusicItem *_playingMusicItem;
 > 3.歌手图标旋转动画实现,使用基础核心动画CABasicAnimation,设置绕z轴旋转360°无限循环等动画属性配置.
 ### 实现更新播放进度功能和歌手图标旋转功能
 - 播放进度定时器创建/移除方法
-- **创建播放进度定时器:** - (void)addProgressTimer;
-- **移除播放进度定时器:** - (void)removeProgressTimer;
+    - **创建播放进度定时器:** - (void)addProgressTimer;
+    - **移除播放进度定时器:** - (void)removeProgressTimer;
 
 ### 实时更新播放进度信息
 - 更新进度进度实现
+
 ```objectivec
 - (void)updateProgressInfo {
     // 1.更新当前音乐播放时间和当前音乐总时长
@@ -392,6 +443,7 @@ static WXMusicItem *_playingMusicItem;
 
 ### 歌手图标旋转动画
 - 歌手图标旋转动画实现
+
 ```objectivec
 - (void)addIconViewAnimate
 {
@@ -416,9 +468,10 @@ static WXMusicItem *_playingMusicItem;
 ## 4.处理滚动条
 ### 自定义滚动歌词的WXLrcScrollView,继承UIScrollView
 - 1.在WXLrcScrollView初始化时,添加滚动歌词的tableView
-- 在`initWithCoder`和`initWithFrame`方法中**开启分页功能**,初始化和`添加tableView`到WXLrcScrollView
-- 设置子控件tableView的数据源和代理,实现数据源方法,为tableView提供显示的测试数据
-- 在layoutSubviews中**添加tableView的约束**,并设置**tableView背景颜色,分割线,内边距**等,必须在layoutSubviews中设置,否则会tableView中的歌词播放不同步,背景为白色等问题.
+    - 在`initWithCoder`和`initWithFrame`方法中**开启分页功能**,初始化和`添加tableView`到WXLrcScrollView
+    - 设置子控件tableView的数据源和代理,实现数据源方法,为tableView提供显示的测试数据
+    - 在layoutSubviews中**添加tableView的约束**,并设置**tableView背景颜色,分割线,内边距**等,必须在layoutSubviews中设置,否则会tableView中的歌词播放不同步,背景为白色等问题.
+
 ```objectivec
 /** layoutSubviews中布局子控件tableView */
 - (void)layoutSubviews
@@ -446,14 +499,16 @@ static WXMusicItem *_playingMusicItem;
 > 在storyboard中设置播放按钮在Normal/Selected状态下的按钮显示的图片
 ### 播放/暂停,上一首,下一首功能实现
 - 播放/暂停功能实现
-- 切换播放按钮的状态
-- 判断是否正在播放,如果当前正在播放则暂停播放,反之则继续播放
-- 暂停播放: 暂停播放,移除定时器,暂停动画(分类实现暂停和继续动画)
-- 继续播放: 继续播放,开启定时器,继续动画
+    - 切换播放按钮的状态 
+    - 判断是否正在播放,如果当前正在播放则暂停播放,反之则继续播放
+        - 暂停播放: 暂停播放,移除定时器,暂停动画(分类实现暂停和继续动画) 
+        - 继续播放: 继续播放,开启定时器,继续动画 
 - 上一首/下一首功能实现
-- 使用WXMusicTool工具类获取上一首/下一首音乐
-- 实现切换音乐的方法
+    - 使用WXMusicTool工具类获取上一首/下一首音乐
+    - 实现切换音乐的方法
+
 - 示例代码
+
 ```objectivec
 /** 下一首 */
 - (IBAction)nextMusic {
@@ -490,8 +545,9 @@ static WXMusicItem *_playingMusicItem;
 ### 音乐播放完毕自动切换到下一首
 - 主控制器的当前播放器遵守`AVAudioPlayerDelegate`代理协议
 - 在播放器创建完成时设置代理,用来监听音乐播放完毕,实现自动切换到下一首的功能
-self.currentPlayer.delegate = self;
+    self.currentPlayer.delegate = self;
 - 实现代理方法`audioPlayerDidFinishPlaying:successfully`,**当前音乐正常播放完成后调用**.
+
 ```objectivec
 #pragma mark - <AVAudioPlayerDelegate>代理协议
 // SINGLE: 当前音乐播放完成后调用,在<AVAudioPlayerDelegate>代理协议中
@@ -511,13 +567,17 @@ self.currentPlayer.delegate = self;
 - 监听进度条`TouchDown事件`,当UISlider监听到TouchDown事件时,移除进度条定时器
 - 监听进度条`TouchUpInside事件`,当UISlider监听到TouchUpInside事件时,更新当前播放进度,并重新开启定时器
 - 监听到进度条`ValueChange事`件,拖动UISlider时,使用**UISlider的value属性和当前音乐总时长计算当前播放进度**,并更新当前播放时间Label的文字信息.
+
 ```objectivec
-self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * self.currentPlayer.duration];
+    self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * self.currentPlayer.duration];
 ```
 ### 进度条添加Tap敲击手势
 - 在Main.storyboard给UISlider进度条添加点击Tap手势
-![Alt text](./Snip20160108_1.png)
+
+![6.进度条添加Tap敲击手势.png](http://upload-images.jianshu.io/upload_images/1253159-645384d433fac5a1.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)    
+
 - 监听敲击手势代码实现
+
 ```objectivec
 /** 监听进度条点击Tap手势 */
 - (IBAction)sliderTap:(UITapGestureRecognizer *)sender {
@@ -551,6 +611,7 @@ self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * se
 ### 歌词模型类功能的实现
 - 歌词模型类的属性: `当前行歌词的播放时间`,`歌词内容`
 - 实现当前行歌词的解析,当前行歌词数据格式: [00:33.20]只是因为在人群中多看了你一眼
+
 ```objectivec
 #import "WXLrcLineItem.h"
 
@@ -601,6 +662,7 @@ self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * se
 
 ### 创建歌词文件处理WXLrcTool工具类
 - 实现将歌词文件转换成歌词模型数组
+
 ```objectivec
 /** 传入本地歌词文件名,解析歌词文件 */
 + (NSArray *)lrcToolWithLrcFileName:(NSString *)lrcFileName
@@ -614,7 +676,7 @@ self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * se
     // SINGLE: 3.通过\n字符切割到数组
     NSArray *lrcArray = [lrcString componentsSeparatedByString:@"\n"];
     
-    /**
+    /** 
      歌词文件头部信息
      [ti:]
      [ar:]
@@ -644,14 +706,14 @@ self.currentLabel.text = [NSString stringWithTime:self.progressSlider.value * se
 ### 主界面控制器创建更新歌词的定时器CADisplayLink定时器
 - 提供创建/移除用于更新歌词的定时器的方法
 - 在定时器定时执行的方法中将当前的播放时间传递给lrcScrollView的currentTime属性,让lrcScrollView实现歌词的进度更新
-self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
+    self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 
 ### 自定义显示歌词的WXLrcLabel
 - 对外提供当前行歌词的进度progress属性,让外部为其设置当前歌词的进度
 - 重写- (void)drawRect:(CGRect)rect方法绘制WXLrcLabel
-- `UIRectFill`会**填充Label颜色,不是填充文字颜色**.  UIRectFill(fullRect);
-- `UIRectFillUsingBlendMode`填充文字函数,kCGBlendModeSourceOut:表示填充文字以外的区域
-
+    - `UIRectFill`会**填充Label颜色,不是填充文字颜色**.  UIRectFill(fullRect);
+    - `UIRectFillUsingBlendMode`填充文字函数,kCGBlendModeSourceOut:表示填充文字以外的区域
+    
 ```objectivec
 - (void)drawRect:(CGRect)rect
 {
@@ -665,7 +727,7 @@ self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
     
     // 3.开始绘制
     // SINGLE: UIRectFill会填充Label颜色,不是填充文字颜色
-    //    UIRectFill(fullRect);
+//    UIRectFill(fullRect);
     // SINGLE: UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn)填充文字,kCGBlendModeSourceOut:表示填充文字以外的区域
     UIRectFillUsingBlendMode(fullRect, kCGBlendModeSourceIn);
 }
@@ -674,7 +736,8 @@ self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 
 ### 实现歌词的滚动,当前行歌词进度颜色填充效果
 - 重写lrcFileName属性set方法来设置tableView中的歌词
-- `歌词bug注意`: 必须将指向当前播放的歌词行数清0,否则在音乐快播放完成时手动切换下一首会导致程序崩溃.奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界.
+    - `歌词bug注意`: 必须将指向当前播放的歌词行数清0,否则在音乐快播放完成时手动切换下一首会导致程序崩溃.奔溃原因: 假设当前音乐歌词总60行,下一首音乐歌词共38行,当前播放到55行是调到下一首,下一首最大才38行,这样会导致tableView的数据源数组访问越界.
+
 ```objectivec
 - (void)setLrcFileName:(NSString *)lrcFileName
 {
@@ -698,13 +761,13 @@ self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 ```
 
 - 实时刷新当前歌词进度
-- 滚动tableView的方法, scrollPosition: UITableViewScrollPositionTop表示tableView滚动到顶部
+    - 滚动tableView的方法, scrollPosition: UITableViewScrollPositionTop表示tableView滚动到顶部
 **- (void)scrollToRowAtIndexPath:(NSIndexPath *)indexPath atScrollPosition:(UITableViewScrollPosition)scrollPosition animated:(BOOL)animated;**
 
-- 计算当前行歌词的进度
-获取当前行歌词进度 当前行歌词进度 = (当前播放的时间 - 当前行歌词的开始时间) / (下一行歌词的开始时间 - 当前行歌词的开始时间)
-- 因该方法每秒执行60次,考虑到内部刷新列表操作和性能问题,判断如果当前行是正在播放的歌词,就无需刷新,通过self.currentIndex != i,如果不等于i,才进入刷新列表
-- 设置当前行歌词后,要刷新当前行和上一行歌词的cell
+    - 计算当前行歌词的进度
+    获取当前行歌词进度 当前行歌词进度 = (当前播放的时间 - 当前行歌词的开始时间) / (下一行歌词的开始时间 - 当前行歌词的开始时间)
+    - 因该方法每秒执行60次,考虑到内部刷新列表操作和性能问题,判断如果当前行是正在播放的歌词,就无需刷新,通过self.currentIndex != i,如果不等于i,才进入刷新列表
+    - 设置当前行歌词后,要刷新当前行和上一行歌词的cell
 
 
 
@@ -777,13 +840,15 @@ self.lrcScrollView.currentTime = self.currentPlayer.currentTime;
 ## 10.设置主界面的歌词
 ### 在主界面中设置主界面歌词
 - 在初始化歌词的ScrollView的setupLrcScrollView方法中初始设置lrcLabel主界面歌词Label
+
 ```objectivec
-self.lrcLabel.text = nil;
-// 3.将主界面的歌词的Label传给lrcScrollView的一个属性 - >lrcLabel,让lrcScrollView为其文字属性,歌词进度赋值
-self.lrcScrollView.lrcLabel = self.lrcLabel;
+    self.lrcLabel.text = nil;
+    // 3.将主界面的歌词的Label传给lrcScrollView的一个属性 - >lrcLabel,让lrcScrollView为其文字属性,歌词进度赋值
+    self.lrcScrollView.lrcLabel = self.lrcLabel;
 ```
 
 - 在scrollViewDidScroll方法中,设置self.lrcLabel的透明度,实现拖动时,主界面歌词渐变效果
+
 ```objectivec
 /** 监听歌词的lrcScrollView的拖动 */
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
@@ -802,56 +867,60 @@ self.lrcScrollView.lrcLabel = self.lrcLabel;
 
 ### 由lrcScrollView内部为主界面歌词内容和进度进行更新
 - 在WXLrcScrollView的setCurrentTime方法中设置主界面歌词的内容和进度
-- 刷新主界面歌词Label内容
-self.lrcLabel.text = currentLrcItem.name;
-- 将当前行歌词进度赋值给主界面传过来的歌词Label;
-self.lrcLabel.progress = progress;
+    - 刷新主界面歌词Label内容
+    self.lrcLabel.text = currentLrcItem.name;
+    - 将当前行歌词进度赋值给主界面传过来的歌词Label;
+    self.lrcLabel.progress = progress;
 
 ---
 ## 11.实现锁屏界面信息展示和操作
 ### 锁屏界面项目配置
 - 设置项目可播放音视频步骤
-- 配置后台可播放音视频 **工程文件->Capabilities -> Background modes ->Audio**
-![Alt text](./Snip20160109_1.png)
-- 创建后台播放音视频的会话,并激活会话
-```objectivec
+    - 配置后台可播放音视频 **工程文件->Capabilities -> Background modes ->Audio**
+        ![7.锁屏界面项目配置.png](http://upload-images.jianshu.io/upload_images/1253159-71b858b71047f9ba.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+
+    - 创建后台播放音视频的会话,并激活会话
+
+  ```objectivec
 // 1.创建会话
-AVAudioSession *session = [AVAudioSession sharedInstance];
-
-// 2.设置类别为后台播放 AVAudioSessionCategoryPlayback: 类别为后台播放,该常量字符串在AVAudioSession.h中
-[session setCategory:AVAudioSessionCategoryPlayback error:nil];
-
-// 3.激活会话
-[session setActive:YES error:nil];
-```
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    
+    // 2.设置类别为后台播放 AVAudioSessionCategoryPlayback: 类别为后台播放,该常量字符串在AVAudioSession.h中
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    // 3.激活会话
+    [session setActive:YES error:nil];
+  ```
 
 - 在AppDelegate.m的didFinishLaunchingWithOptions方法中**创建后台播放音视频的会话,并激活会话**
+
 ```objectivec
-// REMARKS: 项目配置后台可播放音视频
-// SINGLE: 配置后台可播放音视频 工程文件->Capabilities -> Background modes ->Audio
-// CARE: 模拟器上运行时,音乐可后台运行,但是真机运行默认是不能后台播放音视频的,必须在项目中配置以上操作(后台可播放音视频),需创建会话,设置会话类别为后台播放,并激活会话.
-
-// 为确保程序运行时会执行到以下设置音视频会话(后台播放会话)代码,所以放在didFinishLaunchingWithOptions方法中执行
-// 1.创建会话
-AVAudioSession *session = [AVAudioSession sharedInstance];
-
-// 2.设置类别为后台播放 AVAudioSessionCategoryPlayback: 类别为后台播放,该常量字符串在AVAudioSession.h中
-[session setCategory:AVAudioSessionCategoryPlayback error:nil];
-
-// 3.激活会话
-[session setActive:YES error:nil];
-
-return YES;
+    // REMARKS: 项目配置后台可播放音视频
+    // SINGLE: 配置后台可播放音视频 工程文件->Capabilities -> Background modes ->Audio
+    // CARE: 模拟器上运行时,音乐可后台运行,但是真机运行默认是不能后台播放音视频的,必须在项目中配置以上操作(后台可播放音视频),需创建会话,设置会话类别为后台播放,并激活会话.
+    
+    // 为确保程序运行时会执行到以下设置音视频会话(后台播放会话)代码,所以放在didFinishLaunchingWithOptions方法中执行
+    // 1.创建会话
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    
+    // 2.设置类别为后台播放 AVAudioSessionCategoryPlayback: 类别为后台播放,该常量字符串在AVAudioSession.h中
+    [session setCategory:AVAudioSessionCategoryPlayback error:nil];
+    
+    // 3.激活会话
+    [session setActive:YES error:nil];
+    
+    return YES;
 ```
 
 - 设置锁屏界面显示的内容步骤
-- 获取锁屏中心
-MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
-- 设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
-- 将设置的字典信息赋给nowPlayingInfo属性
-playingInfoCenter.nowPlayingInfo = playingInfoDict;
-- 让应用程序开启远程事件
-[[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+    - 获取锁屏中心
+    MPNowPlayingInfoCenter *playingInfoCenter = [MPNowPlayingInfoCenter defaultCenter];
+    - 设置锁屏中心要展示的信息,通过设置锁屏中心nowPlayingInfo属性设置,该属性是字典
+    - 将设置的字典信息赋给nowPlayingInfo属性
+    playingInfoCenter.nowPlayingInfo = playingInfoDict;
+    - 让应用程序开启远程事件
+    [[UIApplication sharedApplication] beginReceivingRemoteControlEvents];
+
 ```objectivec
 // REMARKS: 设置锁屏界面
 /** 设置锁屏界面 */
@@ -898,7 +967,7 @@ playingInfoCenter.nowPlayingInfo = playingInfoDict;
     
     // 3.5 设置音乐当前播放的时间
     [playingInfoDict setObject:@(self.currentTime) forKey:MPNowPlayingInfoPropertyElapsedPlaybackTime];
-    
+
     // 3.6 将设置的字典信息赋给nowPlayingInfo属性
     playingInfoCenter.nowPlayingInfo = playingInfoDict;
     
@@ -987,6 +1056,7 @@ playingInfoCenter.nowPlayingInfo = playingInfoDict;
 
 ### 锁屏界面实现播放,暂停,上一首,下一首功能
 - 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
+
 ```objectivec
 #pragma mark - 监听远程事件,实现锁屏界面可操作播放/暂停,上一首,下一首
 // REMARKS: 监听远程事件,监听锁屏界面操作
